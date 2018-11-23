@@ -1,0 +1,18 @@
+# frozen_string_literal: true
+
+Style/Encoding:
+  Enabled: false
+
+Metrics/LineLength:
+  Max: 120
+
+Metrics/BlockLength:
+  ExcludedMethods: ['describe']
+
+Documentation:
+  Enabled: false
+
+AllCops:
+  Exclude:
+    - 'Gemfile'
+    - 'Gemfile.lock'
