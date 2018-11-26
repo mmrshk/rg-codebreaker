@@ -13,3 +13,5 @@ gem 'rubocop', '~> 0.60.0'
 gem 'pry'
 
 gem "rspec", "~> 3.7"
+
+gem 'i18n'

@@ -62,6 +62,7 @@ PLATFORMS
 DEPENDENCIES
   faker!
   fasterer (~> 0.4.1)
+  i18n
   pry
   rspec (~> 3.7)
   rubocop (~> 0.60.0)
