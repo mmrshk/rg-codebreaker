@@ -24,21 +24,38 @@ class Menu
 
   def stats
     list = @data.load
-    list.each_with_index  {|val, index|
-      #puts "#{index}: #{val}"
-      if val[:difficulty] == "hell"
-        puts "Hell"
-        puts "#{index}: #{val}"
-      elsif val[:difficulty] == "medium"
-        puts "Medium"
-        puts "#{index}: #{val}"
-      elsif val[:difficulty] = "easy"
-        puts "Easy"
-        puts "#{index}: #{val}"
+    hell = []
+    medium = []
+    easy = []
+
+    list.select{  |key, hash|
+      if key[:difficulty] == "hell"
+        hell.push(key)
+      elsif key[:difficulty] == "medium"
+        medium.push(key)
+      elsif key[:difficulty] = "easy"
+        easy.push(key)
       end
-      #binding.pry
     }
+
+    stats_sort(hell)
+    stats_sort(medium)
+    stats_sort(easy)
+
+    list = hell + medium + easy
+
+    list.each_with_index  {|key, index|
+      puts "#{index}: #{key}"
+    }
+    
     game_menu
+  end
+
+  def stats_sort(array)
+    array.sort! { |x,y|
+      y[:hints_used] <=> x[:hints_used]
+      y[:attempts_used] <=> x[:attempts_used]
+    }
   end
 
   def choice_process(command_name)
