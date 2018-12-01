@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
-require 'pry'
 
 RSpec.describe Menu do
   context 'when testing #start_game method' do
@@ -19,8 +20,10 @@ RSpec.describe Menu do
 
   context 'when testing #stats_sort method' do
     it 'sorts array' do
-      array = [{ hints_used: 1, attempts_used: 2 },
-        { hints_used: 2, attempts_used: 3 }]
+      array = [
+        { hints_used: 1, attempts_used: 2 },
+        { hints_used: 2, attempts_used: 3 }
+      ]
       subject.stats_sort(array)
     end
   end
@@ -28,7 +31,7 @@ RSpec.describe Menu do
   context 'when testing #difficulty method' do
     it 'returns selected array' do
       list = []
-      difficulty = "hell"
+      difficulty = 'hell'
       expect(subject).to receive(:select_difficulty)
       expect(subject).to receive(:stats_sort)
       subject.difficulty(list, difficulty)
@@ -37,9 +40,8 @@ RSpec.describe Menu do
 
   context 'when testing #select_difficulty method' do
     it 'returns selected array' do
-      array = []
-      list = [{difficulty: "hell"}]
-      difficulty = "hell"
+      list = [{ difficulty: 'hell' }]
+      difficulty = 'hell'
       subject.select_difficulty(list, difficulty)
     end
   end
@@ -60,29 +62,11 @@ RSpec.describe Menu do
     end
   end
 
-
-
-
-=begin
-context 'when testing #game_menu method' do
-  it 'calls choice_processor method to process command' do
-    expect(subject.instance_variable_get(:@data)).to receive(:create).and_return([])
-    expect(I18n).to receive(:t).with(:start_message)
-    expect(I18n).to receive(:t).with(:choice_options)
-    expect(I18n).to receive(:t).with(:goodbye_message)
-    allow(subject).to receive(:gets).and_return('exit')
-    expect(subject).to receive(:choice_processor).once
-    subject.game_menu
-  end
-end
   context 'when testing #choice_processor method' do
-    it 'calls #game_menu method when command not exist' do
-      command_name = "exit"
-      expect(subject).to receive(:command_error)
-      expect(subject).to receive(:game_menu)
+    it 'calls inputed method' do
+      command_name = 'exit'
+      expect(subject).to receive(:main_commands)
       subject.choice_process(command_name)
     end
   end
-
-=end
 end

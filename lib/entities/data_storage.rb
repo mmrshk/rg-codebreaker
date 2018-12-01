@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class DataStorage
   FILE_NAME = 'lib/database/data.yml'
 

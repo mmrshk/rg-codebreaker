@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Game
   include Validator
   include Commands
@@ -31,12 +33,7 @@ class Game
   def secret_code
     @menu = Menu.new
     loop do
-      message(:promt_to_enter_secret_code_hint_exit)
-      choice = gets.chomp
-      result = choice_process(choice)
-      win(result)
-      attempts_left
-      lost_attempts
+      game_work
       break if @game_end
     end
     save_result
@@ -44,15 +41,23 @@ class Game
     @menu.game_menu
   end
 
+  def game_work
+    message(:promt_to_enter_secret_code_hint_exit)
+    choice = gets.chomp
+    result = choice_process(choice)
+    win(result)
+    attempts_left
+    lost_attempts
+  end
+
   def save_result
     message(:save_results_message)
     choice = gets.chomp
-    result = choice_save_process(choice)
+    choice_save_process(choice)
   end
 
   def choice_save_process(choice)
-    check_save(choice)
-    command_save.dig(choice.to_sym).call
+    command_save(choice)
   end
 
   def save_game_result
@@ -72,6 +77,7 @@ class Game
   def win(result)
     win_array = Array.new(4, '+')
     return unless result == win_array
+
     message(:win_game_message)
     @game_end = true
   end
@@ -85,14 +91,15 @@ class Game
   def level_choice
     message(:hard_level)
     @level = gets.chomp
-    check_level(@level)
+    commands(@level)
   end
 
   def lost_attempts
     return unless @attempts == @attempts_used
+
     message(:lost_game_message)
     @game_end = true
-    #puts @code
+    puts @code
   end
 
   def attempts_left
@@ -101,15 +108,15 @@ class Game
 
   def lost_hints
     return message(:have_no_hints_message) unless @hint_avaliable == true
+
     number = @process.hint_process(@code)
     @hints_used += 1
+    puts "Digit #{number} on place #{@code.index(number) + 1} "
     @hint_avaliable = false if @hints_used == @hints
-    #puts "Digit #{number} on place #{@code.index(number)+1} "
   end
 
   def choice_process(command)
-    check_command(command)
-    commands_in_game.dig(command.to_sym).call unless command =~ /^[1-6]{4}$/
+    commands_in_game(command) unless command =~ /^[1-6]{4}$/
     @process.turn_process(@code, command)
   end
 end

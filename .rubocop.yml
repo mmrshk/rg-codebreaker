@@ -6,8 +6,12 @@ Style/Encoding:
 Metrics/LineLength:
   Max: 120
 
+Metrics/MethodLength:
+  Max: 15
+
 Metrics/BlockLength:
   ExcludedMethods: ['describe']
+  Max: 30
 
 Documentation:
   Enabled: false

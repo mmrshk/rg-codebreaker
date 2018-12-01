@@ -1,5 +1,6 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
-require 'pry'
 
 RSpec.describe Game do
   context 'testing #generate method' do
@@ -9,7 +10,7 @@ RSpec.describe Game do
 
     it 'returns array of integers' do
       array = subject.generate
-      int_array = array.select {|x| x.is_a? Integer}
+      int_array = array.select { |x| x.is_a? Integer }
       expect(array).to eq int_array
     end
   end
@@ -41,7 +42,7 @@ RSpec.describe Game do
       subject.instance_variable_set(:@hint_avaliable, true)
       subject.instance_variable_set(:@hints_used, 1)
       subject.instance_variable_set(:@hints, 2)
-      subject.instance_variable_set(:@code, [2,1,3,1])
+      subject.instance_variable_set(:@code, [2, 1, 3, 1])
       expect(subject.lost_hints).to be false
     end
   end
@@ -78,7 +79,7 @@ RSpec.describe Game do
     it 'checks input of user' do
       expect(I18n).to receive(:t).with(:hard_level)
       allow(subject).to receive(:gets).and_return('hell')
-      expect(subject).to receive(:check_level).once
+      expect(subject).to receive(:commands).once
       subject.level_choice
     end
   end
@@ -97,22 +98,12 @@ RSpec.describe Game do
     it 'saves game result' do
       allow(subject).to receive(:gets).and_return('hell')
       expect(subject.instance_variable_get(:@data)).to receive(:load).and_return([])
-      object = {
-        name: 'eee',
-        difficulty: 'hell',
-        attempts_total: 5,
-        attempts_used: 1,
-        hints_total: 1,
-        hints_used: 0
-      }
-      #expect(subject).to receive(:save).once
       subject.save_game_result
     end
   end
 
   context 'when testing #win method' do
     it 'returns win_game_message' do
-      win_array = Array.new(4, '+')
       result =  Array.new(4, '+')
       expect(I18n).to receive(:t).with(:win_game_message)
       subject.instance_variable_set(:@game_end, true)
@@ -122,41 +113,21 @@ RSpec.describe Game do
 
   context 'when testing #choice_save_process method' do
     it 'process the user input' do
-      choice = "yes"
-      allow(subject).to receive(:gets).and_return('hell')
-      expect(subject).to receive(:check_save).once
+      choice = 'yes'
+      expect(subject).to receive(:command_save).once
       subject.choice_save_process(choice)
     end
   end
 
-
-=begin
-context 'when testing #choice_process method' do
-  it 'process the user input' do
-    allow(subject).to receive(:gets).and_return('exit')
-    command = "exit"
-    expect(subject).to receive(:check_command).once
-    expect(subject.instance_variable_get(:@process)).to receive(:turn_process).and_return([])
-    subject.choice_process(command)
+  context 'when #game_work method' do
+    it 'works with input' do
+      allow(subject).to receive(:gets).and_return('1111')
+      expect(subject).to receive(:choice_process)
+      allow(subject).to receive(:gets).and_return('yes')
+      expect(subject).to receive(:win)
+      expect(subject).to receive(:attempts_left)
+      expect(subject).to receive(:lost_attempts)
+      subject.game_work
+    end
   end
-end
-
-context 'when #secret_code method' do
-  it 'works with input' do
-    expect(subject).to receive(:loop).and_yield
-    allow(subject).to receive(:gets).and_return('1111')
-    expect(subject).to receive(:choice_process)
-    expect(subject).to receive(:win)
-    expect(subject).to receive(:attempts_left)
-    expect(subject).to receive(:lost_attempts)
-    expect(subject).to receive(:save_result)
-    subject.secret_code
-  end
-end
-
-
-context 'when #generate_game' do
-
-end
-=end
 end

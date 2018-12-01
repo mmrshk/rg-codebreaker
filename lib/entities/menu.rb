@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Menu
   include Commands
   def initialize
@@ -23,19 +25,15 @@ class Menu
   end
 
   def stats_sort(array)
-    array.sort! { |x,y|
+    array.sort! do |x, y|
       y[:hints_used] <=> x[:hints_used]
       y[:attempts_used] <=> x[:attempts_used]
-    }
+    end
   end
 
   def select_difficulty(list, difficulty)
     array = []
-    list.select{  |key, hash|
-      if key[:difficulty] == difficulty
-        array.push(key)
-      end
-    }
+    list.select { |key, _| array.push(key) if key[:difficulty] == difficulty }
     array
   end
 
@@ -46,23 +44,16 @@ class Menu
 
   def stats
     list = @data.load
-    hell = difficulty(list, "hell")
-    medium = difficulty(list, "medium")
-    easy = difficulty(list, "easy")
+    hell = difficulty(list, 'hell')
+    medium = difficulty(list, 'medium')
+    easy = difficulty(list, 'easy')
     list = hell + medium + easy
-    list.each_with_index  {|key, index|
-      puts "#{index}: #{key}"
-    }
+    list.each_with_index { |key, index| puts "#{index}: #{key}" }
     game_menu
   end
 
   def choice_process(command_name)
-    if main_commands.dig(command_name.to_sym).nil?
-      message(:command_error)
-      game_menu
-    else
-      main_commands.dig(command_name.to_sym).call
-    end
+    main_commands(command_name)
   end
 
   def exit_from_game

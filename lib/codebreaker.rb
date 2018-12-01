@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require 'i18n'
 require 'i18n_config.rb'
 require_relative 'modules/validator'
