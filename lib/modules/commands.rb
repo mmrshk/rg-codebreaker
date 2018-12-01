@@ -8,10 +8,12 @@ module Commands
   end
 
   def commands
+    @menu = Menu.new
     {
-      easy: -> { generate_easy_game },
-      medium: -> { generate_medium_game },
-      hell: -> { generate_hell_game }
+      easy: -> { generate_game(hints: 2, attempts: 15, msg_name: :easy_game) },
+      medium: -> { generate_game(hints: 1, attempts: 10, msg_name: :medium_game) },
+      hell: -> { generate_game(hints: 1, attempts: 5, msg_name: :hell_game) },
+      exit: -> { @menu.game_menu }
     }
   end
 
@@ -30,5 +32,9 @@ module Commands
       stats: -> { stats },
       exit: -> { exit_from_game }
     }
+  end
+
+  def message(msg_name)
+    I18n.t(msg_name)
   end
 end

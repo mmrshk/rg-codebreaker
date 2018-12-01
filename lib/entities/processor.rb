@@ -9,7 +9,7 @@ class Processor
   end
 
   def place_match(code, guess)
-    result = Array.new(4, '')
+    result = Array.new(4, ' ')
     code.zip(guess).each_with_index do |el, index|
       if el.first == el.last
         result[index] = '+'
@@ -30,6 +30,5 @@ class Processor
 
   def hint_process(code)
     number = code.sample
-    puts "Digit #{number} on place #{code.index(number)+1} " 
   end
 end

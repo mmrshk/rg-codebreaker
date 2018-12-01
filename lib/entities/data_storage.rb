@@ -19,12 +19,4 @@ class DataStorage
   def storage_exist?
     File.exist?(FILE_NAME)
   end
-
-  def view_results
-    File.open(FILE_NAME, 'r') do |file|
-      file.each_line do |line|
-        puts line
-      end
-    end
-  end
 end

@@ -1,25 +1,13 @@
 ---
-- :name: emma
-  :difficulty: hell
+- :name: 
+  :difficulty: You had to 1 hint and 5 attempts
   :attempts_total: 5
-  :attempts_used: 3
+  :attempts_used: 0
   :hints_total: 1
   :hints_used: 0
-- :name: sdfds
-  :difficulty: easy
-  :attempts_total: 15
-  :attempts_used: 2
-  :hints_total: 2
-  :hints_used: 0
-- :name: kfdfks
-  :difficulty: hell
+- :name: 
+  :difficulty: You had to 1 hint and 5 attempts
   :attempts_total: 5
-  :attempts_used: 2
-  :hints_total: 1
-  :hints_used: 1
-- :name: mmm
-  :difficulty: medium
-  :attempts_total: 10
-  :attempts_used: 4
+  :attempts_used: 0
   :hints_total: 1
   :hints_used: 0

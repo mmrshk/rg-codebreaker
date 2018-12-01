@@ -7,8 +7,8 @@ class Menu
 
   def game_menu
     @data.create unless @data.storage_exist?
-    puts I18n.t(:start_message)
-    puts I18n.t(:choice_options)
+    message(:start_message)
+    message(:choice_options)
     choice = gets.chomp
     choice_process(choice)
   end
@@ -18,36 +18,7 @@ class Menu
   end
 
   def rules
-    puts I18n.t(:rules)
-    game_menu
-  end
-
-  def stats
-    list = @data.load
-    hell = []
-    medium = []
-    easy = []
-
-    list.select{  |key, hash|
-      if key[:difficulty] == "hell"
-        hell.push(key)
-      elsif key[:difficulty] == "medium"
-        medium.push(key)
-      elsif key[:difficulty] = "easy"
-        easy.push(key)
-      end
-    }
-
-    stats_sort(hell)
-    stats_sort(medium)
-    stats_sort(easy)
-
-    list = hell + medium + easy
-
-    list.each_with_index  {|key, index|
-      puts "#{index}: #{key}"
-    }
-    
+    message(:rules)
     game_menu
   end
 
@@ -58,9 +29,36 @@ class Menu
     }
   end
 
+  def select_difficulty(list, difficulty)
+    array = []
+    list.select{  |key, hash|
+      if key[:difficulty] == difficulty
+        array.push(key)
+      end
+    }
+    array
+  end
+
+  def difficulty(list, difficulty)
+    array = select_difficulty(list, difficulty)
+    stats_sort(array)
+  end
+
+  def stats
+    list = @data.load
+    hell = difficulty(list, "hell")
+    medium = difficulty(list, "medium")
+    easy = difficulty(list, "easy")
+    list = hell + medium + easy
+    list.each_with_index  {|key, index|
+      puts "#{index}: #{key}"
+    }
+    game_menu
+  end
+
   def choice_process(command_name)
     if main_commands.dig(command_name.to_sym).nil?
-      puts I18n.t(:command_error)
+      message(:command_error)
       game_menu
     else
       main_commands.dig(command_name.to_sym).call
@@ -68,7 +66,7 @@ class Menu
   end
 
   def exit_from_game
-    puts I18n.t(:goodbye_message)
+    message(:goodbye_message)
     exit
   end
 end
