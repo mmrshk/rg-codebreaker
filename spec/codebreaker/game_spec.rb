@@ -24,7 +24,7 @@ RSpec.describe Game do
 
   context 'when #registration method' do
     it 'gets name of user' do
-      expect(I18n).to receive(:t).with(:registration)
+      expect(I18n).to receive(:t).with(:registration, {})
       allow(subject).to receive(:gets).and_return('Nika')
       expect(subject).to receive(:check_name).once
       subject.registration
@@ -34,7 +34,7 @@ RSpec.describe Game do
   context 'when used lost_hints method' do
     it 'returns have_no_hints_message when hints_available false' do
       subject.instance_variable_set(:@hint_avaliable, false)
-      expect(I18n).to receive(:t).with(:have_no_hints_message)
+      expect(I18n).to receive(:t).with(:have_no_hints_message, {})
       subject.lost_hints
     end
 
@@ -51,7 +51,7 @@ RSpec.describe Game do
     it 'returns lost_game_message when attempts eq to attempts_used' do
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@attempts_used, 2)
-      expect(I18n).to receive(:t).with(:lost_game_message)
+      expect(I18n).to receive(:t).with(:lost_game_message, {})
       subject.instance_variable_set(:@game_end, true)
       subject.lost_attempts
     end
@@ -68,7 +68,7 @@ RSpec.describe Game do
 
   context 'when testing #save_result method' do
     it 'expexts the choice of user' do
-      expect(I18n).to receive(:t).with(:save_results_message)
+      expect(I18n).to receive(:t).with(:save_results_message, {})
       allow(subject).to receive(:gets).and_return('yes')
       expect(subject).to receive(:choice_save_process).once
       subject.save_result
@@ -77,7 +77,7 @@ RSpec.describe Game do
 
   context 'when testing #level_choice method' do
     it 'checks input of user' do
-      expect(I18n).to receive(:t).with(:hard_level)
+      expect(I18n).to receive(:t).with(:hard_level, {})
       allow(subject).to receive(:gets).and_return('hell')
       expect(subject).to receive(:commands).once
       subject.level_choice
@@ -89,7 +89,7 @@ RSpec.describe Game do
       hints = 1
       attempts = 10
       msg_name = :easy_game
-      expect(I18n).to receive(:t).with(:easy_game)
+      expect(I18n).to receive(:t).with(:easy_game, {})
       subject.generate_game(hints: hints, attempts: attempts, msg_name: msg_name)
     end
   end
@@ -105,7 +105,7 @@ RSpec.describe Game do
   context 'when testing #win method' do
     it 'returns win_game_message' do
       result =  Array.new(4, '+')
-      expect(I18n).to receive(:t).with(:win_game_message)
+      expect(I18n).to receive(:t).with(:win_game_message, {})
       subject.instance_variable_set(:@game_end, true)
       subject.win(result)
     end

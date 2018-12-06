@@ -12,7 +12,7 @@ RSpec.describe Menu do
 
   context 'when testing #rules' do
     it 'calls rules message' do
-      expect(I18n).to receive(:t).with(:rules)
+      expect(I18n).to receive(:t).with(:rules, {})
       expect(subject).to receive(:game_menu)
       subject.rules
     end
@@ -56,7 +56,7 @@ RSpec.describe Menu do
 
   context 'when testing #exit_from_game method' do
     it 'returns message' do
-      expect(I18n).to receive(:t).with(:goodbye_message)
+      expect(I18n).to receive(:t).with(:goodbye_message, {})
       expect(subject).to receive(:exit)
       subject.exit_from_game
     end

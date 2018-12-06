@@ -9,8 +9,8 @@ class Menu
 
   def game_menu
     @data.create unless @data.storage_exist?
-    message(:start_message)
-    message(:choice_options)
+    message(:start_message, {})
+    message(:choice_options, {})
     choice = gets.chomp
     choice_process(choice)
   end
@@ -20,7 +20,7 @@ class Menu
   end
 
   def rules
-    message(:rules)
+    message(:rules, {})
     game_menu
   end
 
@@ -57,7 +57,7 @@ class Menu
   end
 
   def exit_from_game
-    message(:goodbye_message)
+    message(:goodbye_message, {})
     exit
   end
 end

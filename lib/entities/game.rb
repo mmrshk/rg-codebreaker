@@ -21,7 +21,7 @@ class Game
     @attempts_used = 0
     @game_end = false
     @hint_avaliable = true
-    message(msg_name)
+    message(msg_name, {})
   end
 
   def new_game
@@ -37,12 +37,12 @@ class Game
       break if @game_end
     end
     save_result
-    message(:success_save_message)
+    message(:success_save_message, {})
     @menu.game_menu
   end
 
   def game_work
-    message(:promt_to_enter_secret_code_hint_exit)
+    message(:promt_to_enter_secret_code_hint_exit, {})
     choice = gets.chomp
     result = choice_process(choice)
     win(result)
@@ -51,7 +51,7 @@ class Game
   end
 
   def save_result
-    message(:save_results_message)
+    message(:save_results_message, {})
     choice = gets.chomp
     choice_save_process(choice)
   end
@@ -78,18 +78,18 @@ class Game
     win_array = Array.new(4, '+')
     return unless result == win_array
 
-    message(:win_game_message)
+    message(:win_game_message, {})
     @game_end = true
   end
 
   def registration
-    message(:registration)
+    message(:registration, {})
     @name = gets.chomp
     check_name(@name)
   end
 
   def level_choice
-    message(:hard_level)
+    message(:hard_level, {})
     @level = gets.chomp
     commands(@level)
   end
@@ -97,7 +97,7 @@ class Game
   def lost_attempts
     return unless @attempts == @attempts_used
 
-    message(:lost_game_message)
+    message(:lost_game_message, {})
     @game_end = true
     puts @code
   end
@@ -107,12 +107,11 @@ class Game
   end
 
   def lost_hints
-    return message(:have_no_hints_message) unless @hint_avaliable == true
+    return message(:have_no_hints_message, {}) unless @hint_avaliable == true
 
     number = @process.hint_process(@code)
     @hints_used += 1
     message(:digit_on_place, number: number, code: @code.index(number) + 1)
-    # puts I18n.t(:digit_on_place, number: number, code: @code.index(number) + 1)
     @hint_avaliable = false if @hints_used == @hints
   end
 

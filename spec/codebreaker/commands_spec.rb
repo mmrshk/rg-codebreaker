@@ -40,7 +40,7 @@ RSpec.describe Commands do
       menu = Menu.new
       command_name = 'statsdasdas'
       allow(menu).to receive(:gets).and_return('hell')
-      expect(I18n).to receive(:t).with(:command_error)
+      expect(I18n).to receive(:t).with(:command_error, {})
       expect(menu).to receive(:game_menu)
       menu.main_commands(command_name)
     end
@@ -50,7 +50,7 @@ RSpec.describe Commands do
     it 'returns message' do
       menu = Menu.new
       msg_name = :registration
-      expect(I18n).to receive(:t).with(msg_name)
+      expect(I18n).to receive(:t).with(msg_name, {})
       menu.message(msg_name)
     end
   end

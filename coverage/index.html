@@ -14,7 +14,7 @@
       <img src="./assets/0.10.2/loading.gif" alt="loading"/>
     </div>
     <div id="wrapper" style="display:none;">
-      <div class="timestamp">Generated <abbr class="timeago" title="2018-12-06T09:13:55+02:00">2018-12-06T09:13:55+02:00</abbr></div>
+      <div class="timestamp">Generated <abbr class="timeago" title="2018-12-06T19:36:49+02:00">2018-12-06T19:36:49+02:00</abbr></div>
       <ul class="group_tabs"></ul>
 
       <div id="content">
@@ -621,7 +621,7 @@
         <li class="covered" data-hits="2" data-linenumber="24">
           <span class="hits">2</span>
           
-          <code class="ruby">    message(msg_name)</code>
+          <code class="ruby">    message(msg_name, {})</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="25">
@@ -717,7 +717,7 @@
         <li class="missed" data-hits="0" data-linenumber="40">
           
           
-          <code class="ruby">    message(:success_save_message)</code>
+          <code class="ruby">    message(:success_save_message, {})</code>
         </li>
       
         <li class="missed" data-hits="0" data-linenumber="41">
@@ -747,7 +747,7 @@
         <li class="covered" data-hits="1" data-linenumber="45">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:promt_to_enter_secret_code_hint_exit)</code>
+          <code class="ruby">    message(:promt_to_enter_secret_code_hint_exit, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="46">
@@ -801,7 +801,7 @@
         <li class="covered" data-hits="1" data-linenumber="54">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:save_results_message)</code>
+          <code class="ruby">    message(:save_results_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="55">
@@ -963,7 +963,7 @@
         <li class="covered" data-hits="1" data-linenumber="81">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:win_game_message)</code>
+          <code class="ruby">    message(:win_game_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="82">
@@ -993,7 +993,7 @@
         <li class="covered" data-hits="2" data-linenumber="86">
           <span class="hits">2</span>
           
-          <code class="ruby">    message(:registration)</code>
+          <code class="ruby">    message(:registration, {})</code>
         </li>
       
         <li class="covered" data-hits="2" data-linenumber="87">
@@ -1029,7 +1029,7 @@
         <li class="covered" data-hits="2" data-linenumber="92">
           <span class="hits">2</span>
           
-          <code class="ruby">    message(:hard_level)</code>
+          <code class="ruby">    message(:hard_level, {})</code>
         </li>
       
         <li class="covered" data-hits="2" data-linenumber="93">
@@ -1077,7 +1077,7 @@
         <li class="covered" data-hits="1" data-linenumber="100">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:lost_game_message)</code>
+          <code class="ruby">    message(:lost_game_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="101">
@@ -1137,7 +1137,7 @@
         <li class="covered" data-hits="2" data-linenumber="110">
           <span class="hits">2</span>
           
-          <code class="ruby">    return message(:have_no_hints_message) unless @hint_avaliable == true</code>
+          <code class="ruby">    return message(:have_no_hints_message, {}) unless @hint_avaliable == true</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="111">
@@ -1161,7 +1161,7 @@
         <li class="covered" data-hits="1" data-linenumber="114">
           <span class="hits">1</span>
           
-          <code class="ruby">    puts &quot;Digit #{number} on place #{@code.index(number) + 1} &quot;</code>
+          <code class="ruby">    message(:digit_on_place, number: number, code: @code.index(number) + 1)</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="115">
@@ -1300,13 +1300,13 @@
         <li class="missed" data-hits="0" data-linenumber="12">
           
           
-          <code class="ruby">    message(:start_message)</code>
+          <code class="ruby">    message(:start_message, {})</code>
         </li>
       
         <li class="missed" data-hits="0" data-linenumber="13">
           
           
-          <code class="ruby">    message(:choice_options)</code>
+          <code class="ruby">    message(:choice_options, {})</code>
         </li>
       
         <li class="missed" data-hits="0" data-linenumber="14">
@@ -1366,7 +1366,7 @@
         <li class="covered" data-hits="1" data-linenumber="23">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:rules)</code>
+          <code class="ruby">    message(:rules, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="24">
@@ -1588,7 +1588,7 @@
         <li class="covered" data-hits="1" data-linenumber="60">
           <span class="hits">1</span>
           
-          <code class="ruby">    message(:goodbye_message)</code>
+          <code class="ruby">    message(:goodbye_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="61">
@@ -2161,13 +2161,13 @@
         <li class="covered" data-hits="1" data-linenumber="45">
           <span class="hits">1</span>
           
-          <code class="ruby">  def message(msg_name)</code>
+          <code class="ruby">  def message(msg_name, hashee = {})</code>
         </li>
       
-        <li class="covered" data-hits="21" data-linenumber="46">
-          <span class="hits">21</span>
+        <li class="covered" data-hits="22" data-linenumber="46">
+          <span class="hits">22</span>
           
-          <code class="ruby">    puts I18n.t(msg_name)</code>
+          <code class="ruby">    puts I18n.t(msg_name, **hashee)</code>
         </li>
       
         <li class="never" data-hits="" data-linenumber="47">
@@ -2679,7 +2679,7 @@
         <li class="covered" data-hits="1" data-linenumber="43">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="44">
@@ -2739,7 +2739,7 @@
         <li class="covered" data-hits="1" data-linenumber="53">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(msg_name)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(msg_name, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="54">
@@ -3449,7 +3449,7 @@
         <li class="covered" data-hits="1" data-linenumber="27">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:registration)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:registration, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="28">
@@ -3509,7 +3509,7 @@
         <li class="covered" data-hits="1" data-linenumber="37">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:have_no_hints_message)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:have_no_hints_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="38">
@@ -3611,7 +3611,7 @@
         <li class="covered" data-hits="1" data-linenumber="54">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:lost_game_message)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:lost_game_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="55">
@@ -3713,7 +3713,7 @@
         <li class="covered" data-hits="1" data-linenumber="71">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:save_results_message)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:save_results_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="72">
@@ -3767,7 +3767,7 @@
         <li class="covered" data-hits="1" data-linenumber="80">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:hard_level)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:hard_level, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="81">
@@ -3839,7 +3839,7 @@
         <li class="covered" data-hits="1" data-linenumber="92">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:easy_game)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:easy_game, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="93">
@@ -3935,7 +3935,7 @@
         <li class="covered" data-hits="1" data-linenumber="108">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:win_game_message)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:win_game_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="109">
@@ -4194,7 +4194,7 @@
         <li class="covered" data-hits="1" data-linenumber="15">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:rules)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:rules, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="16">
@@ -4458,7 +4458,7 @@
         <li class="covered" data-hits="1" data-linenumber="59">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:goodbye_message)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:goodbye_message, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="60">
@@ -5282,7 +5282,7 @@
         <li class="covered" data-hits="1" data-linenumber="10">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(msg_name)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(msg_name, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="11">
@@ -5330,7 +5330,7 @@
         <li class="covered" data-hits="1" data-linenumber="18">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="19">
@@ -5390,7 +5390,7 @@
         <li class="covered" data-hits="1" data-linenumber="28">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:registration_name_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:registration_name_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="29">
@@ -5444,7 +5444,7 @@
         <li class="covered" data-hits="1" data-linenumber="37">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="38">
@@ -5504,7 +5504,7 @@
         <li class="covered" data-hits="1" data-linenumber="47">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:command_int_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:command_int_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="48">
@@ -5552,7 +5552,7 @@
         <li class="covered" data-hits="1" data-linenumber="55">
           <span class="hits">1</span>
           
-          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error)</code>
+          <code class="ruby">      expect(I18n).to receive(:t).with(:command_error, {})</code>
         </li>
       
         <li class="covered" data-hits="1" data-linenumber="56">
