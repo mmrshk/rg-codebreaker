@@ -42,7 +42,7 @@ module Commands
     end
   end
 
-  def message(msg_name)
-    puts I18n.t(msg_name)
+  def message(msg_name, hashee = {})
+    puts I18n.t(msg_name, **hashee)
   end
 end
