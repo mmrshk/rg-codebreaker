@@ -45,3 +45,4 @@ en:
   save_results_message: "Do you want to save result? 1. yes 2. no"
   success_save_message: "Your result was saved"
   have_no_hints_message: "Oh, your hints ended"
+  digit_on_place: "Digit %{number} on place %{code}"

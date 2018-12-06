@@ -111,7 +111,7 @@ class Game
 
     number = @process.hint_process(@code)
     @hints_used += 1
-    puts "Digit #{number} on place #{@code.index(number) + 1} "
+    puts I18n.t(:digit_on_place, number: number, code: @code.index(number) + 1)
     @hint_avaliable = false if @hints_used == @hints
   end
 
