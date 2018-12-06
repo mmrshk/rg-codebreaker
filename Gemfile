@@ -17,3 +17,5 @@ gem "rspec", "~> 3.7"
 gem 'i18n'
 
 gem 'simplecov', require: false, group: :test
+
+gem 'rspec_junit_formatter', group: :test
