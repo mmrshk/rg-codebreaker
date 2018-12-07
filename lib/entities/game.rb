@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Game
-  include Validator
-  include Commands
+  WIN_ARRAY_LENGTH = 4
 
   def initialize
     @process = Processor.new
@@ -15,49 +14,20 @@ class Game
 
   def generate_game(hints:, attempts:, msg_name:)
     @code = generate
+    #@hints = @code.shuffle.first(hints)
     @hints = hints
     @hints_used = 0
     @attempts = attempts
     @attempts_used = 0
     @game_end = false
     @hint_avaliable = true
-    message(msg_name, {})
+    message(msg_name)
   end
 
-  def new_game
-    registration
-    level_choice
-    secret_code
-  end
-
-  def secret_code
-    @menu = Menu.new
-    loop do
-      game_work
-      break if @game_end
-    end
-    save_result
-    message(:success_save_message, {})
-    @menu.game_menu
-  end
-
-  def game_work
-    message(:promt_to_enter_secret_code_hint_exit, {})
-    choice = gets.chomp
-    result = choice_process(choice)
+  def game_work(result)
     win(result)
     attempts_left
-    lost_attempts
-  end
-
-  def save_result
-    message(:save_results_message, {})
-    choice = gets.chomp
-    choice_save_process(choice)
-  end
-
-  def choice_save_process(choice)
-    command_save(choice)
+    check_for_lose
   end
 
   def save_game_result
@@ -70,34 +40,13 @@ class Game
       hints_total: @hints,
       hints_used: @hints_used ||= lost_hints
     }
-    array = list.push(object)
-    @data.save(array)
+    @data.save(list.push(object))
   end
 
-  def win(result)
-    win_array = Array.new(4, '+')
-    return unless result == win_array
+  def check_for_lose
+    return if @attempts != @attempts_used
 
-    message(:win_game_message, {})
-    @game_end = true
-  end
-
-  def registration
-    message(:registration, {})
-    @name = gets.chomp
-    check_name(@name)
-  end
-
-  def level_choice
-    message(:hard_level, {})
-    @level = gets.chomp
-    commands(@level)
-  end
-
-  def lost_attempts
-    return unless @attempts == @attempts_used
-
-    message(:lost_game_message, {})
+    message(:lost_game_message)
     @game_end = true
     puts @code
   end
@@ -107,16 +56,11 @@ class Game
   end
 
   def lost_hints
-    return message(:have_no_hints_message, {}) unless @hint_avaliable == true
+    return message(:have_no_hints_message) if !@hint_avaliable
 
     number = @process.hint_process(@code)
     @hints_used += 1
     message(:digit_on_place, number: number, code: @code.index(number) + 1)
     @hint_avaliable = false if @hints_used == @hints
-  end
-
-  def choice_process(command)
-    commands_in_game(command) unless command =~ /^[1-6]{4}$/
-    @process.turn_process(@code, command)
   end
 end

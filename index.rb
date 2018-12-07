@@ -2,5 +2,4 @@
 
 require_relative 'autoload.rb'
 
-menu = Menu.new
-menu.game_menu
+Menu.new.game_menu

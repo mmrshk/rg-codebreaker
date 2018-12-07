@@ -11,6 +11,7 @@ class DataStorage
 
   def load
     object = [Menu]
+    binding.pry
     YAML.load(File.open(FILE_NAME), object) if storage_exist?
   end
 
