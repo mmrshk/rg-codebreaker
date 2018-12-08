@@ -42,6 +42,7 @@ RSpec.describe Validator do
 
   context 'when testing #check_command method' do
     it 'returns message command_int_error' do
+      #constant = "1111" + 1 
       game = Game.new
       command = '111111'
       expect(I18n).to receive(:t).with(:command_int_error, {})

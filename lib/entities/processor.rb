@@ -11,7 +11,7 @@ class Processor
   end
 
   def place_match(code, guess)
-    result = Array.new(4, ' ')
+    result = Array.new(Game::WIN_ARRAY_LENGTH, ' ')
     code.zip(guess).each_with_index do |el, index|
       result[index] = '+' if el.first == el.last
     end
@@ -28,7 +28,7 @@ class Processor
     result
   end
 
-  def hint_process(code)
-    code.sample
+  def hint_process(hints)
+    hints.pop
   end
 end

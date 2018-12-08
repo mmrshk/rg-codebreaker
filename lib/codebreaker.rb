@@ -8,6 +8,8 @@ require_relative 'entities/game'
 require_relative 'entities/data_storage'
 require_relative 'entities/processor'
 require_relative 'entities/menu'
+require_relative 'entities/renderer'
+require_relative 'entities/statistics'
 
 module Codebreaker
 end

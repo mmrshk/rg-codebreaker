@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Commands do
   context 'when testing #main_commands' do
+    #let for menu
     it 'returns #start_game' do
       menu = Menu.new
       command_name = 'start'

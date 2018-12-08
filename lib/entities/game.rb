@@ -2,65 +2,72 @@
 
 class Game
   WIN_ARRAY_LENGTH = 4
+  DIFFICULTIES = {
+    easy: {
+      attempts: 15,
+      hints: 2,
+      msg_name: :easy_game
+    },
+    medium: {
+      attempts: 10,
+      hints: 1,
+      msg_name: :medium_game
+    },
+    hell: {
+      attempts: 5,
+      hints: 1,
+      msg_name: :hell_game
+    }
+  }.freeze
+  EASY = 'easy'
+  MEDIUM = 'medium'
+  HELL = 'hell'
+
+  attr_reader :attempts, :hints
 
   def initialize
     @process = Processor.new
     @data = DataStorage.new
+    @renderer = Renderer.new
   end
 
   def generate
-    Array.new(4) { rand(1..6) }
+    Array.new(WIN_ARRAY_LENGTH) { rand(1..6) }
   end
 
   def generate_game(hints:, attempts:, msg_name:)
     @code = generate
-    #@hints = @code.shuffle.first(hints)
-    @hints = hints
-    @hints_used = 0
+    @hints = @code.sample(hints)
     @attempts = attempts
-    @attempts_used = 0
-    @game_end = false
-    @hint_avaliable = true
-    message(msg_name)
-  end
-
-  def game_work(result)
-    win(result)
-    attempts_left
-    check_for_lose
-  end
-
-  def save_game_result
-    list = @data.load
-    object = {
-      name: @name ||= registration,
-      difficulty: @level ||= level_choice,
-      attempts_total: @attempts,
-      attempts_used: @attempts_used ||= attempts_left,
-      hints_total: @hints,
-      hints_used: @hints_used ||= lost_hints
-    }
-    @data.save(list.push(object))
+    @renderer.message(msg_name)
   end
 
   def check_for_lose
-    return if @attempts != @attempts_used
+    return unless @attempts.zero?
 
-    message(:lost_game_message)
-    @game_end = true
-    puts @code
+    @renderer.lost_game_message(@code)
+    false
   end
 
   def attempts_left
-    @attempts_used += 1
+    @attempts -= 1
   end
 
   def lost_hints
-    return message(:have_no_hints_message) if !@hint_avaliable
+    return @renderer.no_hints_message? if @hints.empty?
 
-    number = @process.hint_process(@code)
-    @hints_used += 1
-    message(:digit_on_place, number: number, code: @code.index(number) + 1)
-    @hint_avaliable = false if @hints_used == @hints
+    @renderer.digit_on_place(@process.hint_process(@hints))
+  end
+
+  def start_process(command)
+    @process.turn_process(@code, command)
+  end
+
+  def calculate(param, difficulty)
+    initial_params = Game::DIFFICULTIES[difficulty.to_sym]
+
+    calculated = { tries: initial_params[:attempts] - @attempts,
+                   suggestions: initial_params[:hints] - @hints.length }
+    calculated[param]
   end
 end

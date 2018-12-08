@@ -1,45 +1,49 @@
 # frozen_string_literal: true
 
 module Commands
+  START = 'start'
+  EXIT = 'exit'
+  RULES = 'rules'
+  STATS = 'stats'
+  HINT = 'hint'
+  YES = 'yes'
+  NO = 'no'
+
   def main_commands(command_name)
     case command_name
-    when 'start' then new_game
-    when 'exit' then exit_from_game
-    when 'rules' then rules
-    when 'stats' then stats
+    when START then new_game
+    when EXIT then exit_from_game
+    when RULES then rules
+    when STATS then stats
     else
-      message(:command_error)
+      renderer.command_error
       game_menu
     end
   end
 
-  def commands_in_game(command_name)
+  def commands_in_game(command_name, game)
     case command_name
-    when 'hint' then lost_hints
-    when 'exit' then game_menu
+    when HINT then game.lost_hints
+    when EXIT then game_menu
     else check_command(command_name)
     end
   end
 
-  def commands(level)
+  def commands_to_choose_level(level, game)
     case level
-    when 'easy' then generate_game(hints: 2, attempts: 15, msg_name: :easy_game)
-    when 'medium' then generate_game(hints: 1, attempts: 10, msg_name: :medium_game)
-    when 'hell' then generate_game(hints: 1, attempts: 5, msg_name: :hell_game)
-    when 'exit' then game_menu
+    when Game::EASY then game.generate_game(Game::DIFFICULTIES[Game::EASY.to_sym])
+    when Game::MEDIUM then game.generate_game(Game::DIFFICULTIES[Game::MEDIUM.to_sym])
+    when Game::HELL then game.generate_game(Game::DIFFICULTIES[Game::HELL.to_sym])
+    when EXIT then game_menu
     else check_level
     end
   end
 
   def command_save(command_name)
     case command_name
-    when 'yes' then save_game_result
-    when 'no' then game_menu
+    when YES then save_game_result
+    when NO then game_menu
     else check_save
     end
-  end
-
-  def message(msg_name, hashee = {})
-    puts I18n.t(msg_name, **hashee)
   end
 end
