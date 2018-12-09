@@ -3,18 +3,19 @@
 require 'spec_helper'
 
 RSpec.describe Processor do
+  CODE_P = '1223'
+  QUESS = '1223'
+  CODE_ARRAY = [1, 2, 3, 4]
+
   context 'when testing #turn_process method' do
     it 'returns result_array' do
-      code = '1223'
-      guess = '1223'
       expect(subject).to receive(:place_match)
       expect(subject).to receive(:out_of_place_match)
-      subject.turn_process(code, guess)
+      subject.turn_process(CODE_P, QUESS)
     end
   end
 
   context 'when testing #place_match method' do
-    code = [1, 2, 3, 4]
     [
       [
         [1, 1, 1, 1], ['+', ' ', ' ', ' ']
@@ -42,15 +43,14 @@ RSpec.describe Processor do
       ]
     ].each do |value|
       it "tests that #{value.first} equals to #{value.last}" do
-        expect(subject.place_match(code, value.first)).to eq value.last
+        expect(subject.place_match(CODE_ARRAY, value.first)).to eq value.last
       end
     end
   end
 
   context 'when testing #hint_processor method' do
     it 'checks if hint is displayed' do
-      code = [1, 2, 3, 4]
-      subject.hint_process(code)
+      subject.hint_process(CODE_ARRAY)
     end
   end
 

@@ -15,8 +15,3 @@ Metrics/BlockLength:
 
 Documentation:
   Enabled: false
-
-AllCops:
-  Exclude:
-    - 'Gemfile'
-    - 'Gemfile.lock'

@@ -3,59 +3,81 @@
 require 'spec_helper'
 
 RSpec.describe Validator do
-  context 'when testing #message' do
-    it 'returns message' do
-      menu = Menu.new
-      msg_name = :registration
-      expect(I18n).to receive(:t).with(msg_name, {})
-      menu.message(msg_name)
-    end
-  end
+  let(:menu) { Menu.new }
+  VALID_NAME = 'Emma'
+  EMPTY_NAME = ''
+  EXIT = 'exit'
+  NO = 'no'
+  CODE_V = "1111"
+  CODE_UNVALID = "7678"
 
   context 'testing #check_level method' do
     it 'returns message command_error' do
-      game = Game.new
       expect(I18n).to receive(:t).with(:command_error, {})
-      expect(game).to receive(:level_choice).once
-      game.check_level
+      expect(menu).to receive(:level_choice)
+      menu.check_level
     end
   end
 
-  context 'when testing #check_name method' do
-    it 'returns registration_name_error message' do
-      game = Game.new
-      name = 'a'
-      expect(I18n).to receive(:t).with(:registration_name_error, {})
-      expect(game).to receive(:registration).once
-      game.check_name(name)
+  context 'testing #check_name method' do
+    it 'call registration method if name valid' do
+      expect(menu).to receive(:check_name_emptyness).with(VALID_NAME).and_return(true)
+      expect(menu).to receive(:check_name_length).with(VALID_NAME).and_return(true)
+      menu.check_name(VALID_NAME)
     end
   end
 
-  context 'when testing #check_save method' do
-    it 'returns command_error message' do
-      game = Game.new
-      expect(I18n).to receive(:t).with(:command_error, {})
-      expect(game).to receive(:save_result).once
-      game.check_save
+  context 'testing #check_name_emptyness method' do
+    it 'returns true when name not empty' do
+      expect(menu.check_name_emptyness(VALID_NAME)).to be true
+    end
+
+    it 'returns registration_name_emptyness_error' do
+      expect(menu.check_name_emptyness(EMPTY_NAME)).to be nil
+      expect(menu.renderer).to receive(:registration_name_emptyness_error)
+      menu.check_name_emptyness(EMPTY_NAME)
     end
   end
 
-  context 'when testing #check_command method' do
-    it 'returns message command_int_error' do
-      #constant = "1111" + 1 
-      game = Game.new
-      command = '111111'
-      expect(I18n).to receive(:t).with(:command_int_error, {})
-      expect(game).to receive(:secret_code).once
-      game.check_command(command)
+  context 'testing #check_name_length method' do
+    it 'call registration method if name valid' do
+      expect(menu.check_name_emptyness(VALID_NAME)).to be true
+      menu.check_name_length(VALID_NAME)
     end
 
-    it 'returns message command_error' do
-      game = Game.new
-      command = 'exittt'
-      expect(I18n).to receive(:t).with(:command_error, {})
-      expect(game).to receive(:secret_code).once
-      game.check_command(command)
+    it 'returns registration_name_length_error' do
+      expect(menu.check_name_emptyness(EMPTY_NAME)).to be nil
+      expect(menu.renderer).to receive(:registration_name_length_error)
+      menu.check_name_length(EMPTY_NAME)
+    end
+  end
+
+  context 'testing #check_command_length method' do
+    it 'return true' do
+      expect(menu.check_command_length(CODE_V)).to be true
+      menu.check_command_length(CODE_V)
+    end
+  end
+
+  context 'testing #check_command_range method' do
+    it 'return true' do
+      expect(menu.check_command_range(CODE_V)).to be true
+      menu.check_command_range(CODE_V)
+    end
+  end
+
+  context 'testing #check_command method' do
+    it 'return command_error' do
+      command = 'w'
+      expect(menu.renderer).to receive(:command_error).once
+      expect(menu).to receive(:secret_code).once
+      menu.check_command(command)
+    end
+
+    it 'returns registration_name_length_error' do
+      expect(menu).to receive(:check_command_length)
+      expect(menu).to receive(:check_command_range)
+      menu.check_command(CODE_V)
     end
   end
 end
