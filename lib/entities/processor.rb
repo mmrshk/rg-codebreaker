@@ -11,7 +11,7 @@ class Processor
   end
 
   def place_match(code, guess)
-    result = Array.new(Game::WIN_ARRAY_LENGTH, ' ')
+    result = Array.new(Game::DIGITS_COUNT, ' ')
     code.zip(guess).each_with_index do |el, index|
       result[index] = '+' if el.first == el.last
     end

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class DataStorage
-  FILE_NAME = 'lib/database/data.yml'
+  FILE_NAME = 'database/data.yml'
 
   def create
     object = []

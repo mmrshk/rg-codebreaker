@@ -8,7 +8,7 @@ RSpec.describe Game do
 
   context 'testing #generate method' do
     it 'checks that number mathes regex template' do
-      expect(subject.generate.join).to match(/^[1-6]{#{Game::WIN_ARRAY_LENGTH}}$/)
+      expect(subject.generate.join).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
     end
 
     it 'returns array of integers' do
@@ -44,7 +44,7 @@ RSpec.describe Game do
   context 'when #turn_process method' do
     it do
       process = subject.instance_variable_get(:@process)
-      win_code = Array.new(Game::WIN_ARRAY_LENGTH, '+')
+      win_code = Array.new(Game::DIGITS_COUNT, '+')
       subject.instance_variable_set(:@code, win_code)
       expect(process).to receive(:turn_process).with(win_code, CODE).once
       subject.start_process(CODE)

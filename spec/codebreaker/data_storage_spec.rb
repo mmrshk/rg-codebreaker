@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe DataStorage do
   before do
-    stub_const('FILE_NAME', 'lib/database/data_test.yml')
+    stub_const('FILE_NAME', 'database/data_test.yml')
   end
   TEST_OBJECT = {
     name: 'Lolly',

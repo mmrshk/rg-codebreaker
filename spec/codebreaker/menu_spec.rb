@@ -100,7 +100,7 @@ RSpec.describe Menu do
     end
 
     it 'returns #win_game_message' do
-      result = Array.new(Game::WIN_ARRAY_LENGTH, '+')
+      result = Array.new(Game::DIGITS_COUNT, '+')
       expect(subject.win(result)).to be true
       expect(subject.renderer).to receive(:win_game_message)
       subject.win(result)

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'rspec'
 require 'yaml'
 require 'simplecov'
 SimpleCov.start do

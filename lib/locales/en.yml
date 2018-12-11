@@ -31,9 +31,9 @@ en:
   Codebreaker also has some number of hints(depends on chosen difficulty). If a user takes a hint - he receives back a separate digit of the secret code.
 "
   registration: "Before start, enter your name, please "
-  easy_game: "You had to 2 hints and 15 attempts"
-  medium_game: "You had to 1 hint and 10 attempts"
-  hell_game: "You had to 1 hint and 5 attempts"
+  easy: "You had to 2 hints and 15 attempts"
+  medium: "You had to 1 hint and 10 attempts"
+  hell: "You had to 1 hint and 5 attempts"
   promt_to_enter_secret_code_hint_exit: "1. Enter your secret code
   2. hint
   3. exit "

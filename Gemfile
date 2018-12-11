@@ -4,18 +4,20 @@ source 'https://rubygems.org'
 
 git_source(:github) { |repo_name| "https://github.com/#{repo_name}" }
 
-gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
+group :development, :test do
+  gem 'faker', :git => 'https://github.com/stympy/faker.git', :branch => 'master'
 
-gem 'fasterer', '~> 0.4.1'
+  gem 'fasterer'
 
-gem 'rubocop', '~> 0.60.0'
+  gem 'rubocop'
 
-gem 'pry'
+  gem 'pry'
 
-gem 'rspec', '~> 3.7'
+  gem 'rspec'
+
+  gem 'simplecov', require: false, group: :test
+
+  gem 'rspec_junit_formatter', group: :test
+end
 
 gem 'i18n'
-
-gem 'simplecov', require: false, group: :test
-
-gem 'rspec_junit_formatter', group: :test
