@@ -1,13 +1,10 @@
 # frozen_string_literal: true
 
 class Processor
-  def turn_process(code, guess)
+  def secret_code_process(code, guess)
     guess = guess.to_i.digits.reverse
     result_array = place_match(code, guess)
-    result_array = out_of_place_match(result_array, code, guess)
-    p code
-    p result_array
-    result_array
+    out_of_place_match(result_array, code, guess)
   end
 
   def place_match(code, guess)

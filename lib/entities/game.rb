@@ -16,9 +16,9 @@ class Game
       hints: 1,
     }
   }.freeze
-  EASY = 'easy'
-  MEDIUM = 'medium'
-  HELL = 'hell'
+  EASY = :easy
+  MEDIUM = :medium
+  HELL = :hell
 
   attr_reader :attempts, :hints, :code
 
@@ -41,12 +41,12 @@ class Game
   end
 
   def start_process(command)
-    @process.turn_process(@code, command)
+    @process.secret_code_process(@code, command)
   end
 
   def calculate(param, difficulty)
     initial_params = Game::DIFFICULTIES[difficulty.to_sym]
-
+    
     calculated = { tries: initial_params[:attempts] - @attempts,
                    suggestions: initial_params[:hints] - @hints.length }
     calculated[param]

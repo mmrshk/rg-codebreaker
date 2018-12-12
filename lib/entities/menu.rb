@@ -4,11 +4,19 @@ class Menu
   include Validator
   attr_reader :data, :renderer, :game
 
+  START = :start
+  EXIT = :exit
+  RULES = :rules
+  STATS = :stats
+  HINT = :hint
+  YES = :yes
+  NO = :no
+
   def initialize
     @data = DataStorage.new
     @renderer = Renderer.new
+    @process = Processor.new
     @game = Game.new
-    @command = Commands.new
   end
 
   def game_menu
@@ -16,7 +24,6 @@ class Menu
     @renderer.start_message
     @renderer.choice_options
     choice_menu_process(gets.chomp)
-    #@renderer.message(msg_name)
   end
 
   def rules
@@ -55,7 +62,7 @@ class Menu
   def level_choice
     @renderer.hard_level
     @level = gets.chomp
-    @command.choose_level(@level, @menu)
+    choose_level(@level)
   end
 
   def secret_code
@@ -76,16 +83,9 @@ class Menu
   end
 
   def choice_code_process(command)
-    @command.game_operations(command, @menu)
-    @game.start_process(command)
-  end
-
-  def choice_save_process(choice)
-    @command.save_operation(choice, @menu)
-  end
-
-  def choice_menu_process(command_name)
-    @command.main_operations(command_name, @menu)
+    game_operations(command)
+    p @game.code
+    p @game.start_process(command)
   end
 
   def exit_from_game
@@ -102,13 +102,60 @@ class Menu
 
   def save_game_result
     list = @data.load
+
     object = {
       name: @name,
       difficulty: @level,
+      all_attempts: Game::DIFFICULTIES[Game::EASY][:attempts],
       attempts_used: @game.calculate(:tries, @level),
+      all_hints: Game::DIFFICULTIES[Game::EASY][:hints],
       hints_used: @game.calculate(:suggestions, @level)
     }
 
     @data.save(list.push(object))
+  end
+
+  def choice_menu_process(command_name)
+    case command_name.to_sym
+    when START then new_game
+    when EXIT then exit_from_game
+    when RULES then rules
+    when STATS then stats
+    else
+      @renderer.command_error
+      game_menu
+    end
+  end
+
+  def game_operations(command_name)
+    case command_name.to_sym
+    when HINT then lost_hints
+    when EXIT then game_menu
+    else check_command(command_name)
+    end
+  end
+
+  def choose_level(level)
+    case level.to_sym
+    when Game::EASY
+       @game.generate_game(Game::DIFFICULTIES[Game::EASY])
+       @renderer.message(Game::EASY)
+    when Game::MEDIUM
+       @game.generate_game(Game::DIFFICULTIES[Game::MEDIUM])
+       @renderer.message(Game::MEDIUM)
+    when Game::HELL
+       @game.generate_game(Game::DIFFICULTIES[Game::HELL])
+       @renderer.message(Game::HELL)
+    when EXIT then game_menu
+    else check_level
+    end
+  end
+
+  def choice_save_process(command_name)
+    case command_name.to_sym
+    when YES then save_game_result
+    when NO then game_menu
+    else check_save
+    end
   end
 end
