@@ -1,53 +1,52 @@
 # frozen_string_literal: true
 
 require 'spec_helper'
-require "pry"
 
 RSpec.describe Game do
   CODE = '1111'
 
-  context 'testing #generate method' do
+  context 'testing #generate_secret_code method' do
     it 'checks that number mathes regex template' do
-      expect(subject.generate.join).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
+      expect(subject.generate_secret_code.join).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
     end
 
     it 'returns array of integers' do
-      code_array = subject.generate
+      code_array = subject.generate_secret_code
       int_array = code_array.select { |x| x.is_a? Integer }
       expect(code_array).to eq int_array
-    end
-  end
-
-  context 'used #attempts_left method' do
-    it 'decreases attempts by one when used' do
-      attempts = 3
-      subject.instance_variable_set(:@attempts, 3)
-      expect(subject.attempts_left).to eq attempts - 1
-    end
-  end
-
-  context 'when #check_for_lose method' do
-    it 'returns lost_game_message when attempts not eq to zero' do
-      subject.instance_variable_set(:@attempts, 1)
-      subject.check_for_lose
     end
   end
 
   context 'when #generate_game method' do
     it 'returns message' do
       initial_params = Game::DIFFICULTIES[Game::EASY.to_sym]
-      expect(I18n).to receive(:t).with(initial_params[:msg_name], {})
-      subject.generate_game(hints: initial_params[:hints], attempts: initial_params[:attempts], msg_name: initial_params[:msg_name])
+      subject.generate_game(hints: initial_params[:hints], attempts: initial_params[:attempts])
     end
   end
 
-  context 'when #turn_process method' do
+  context 'when #start_process method' do
     it do
       process = subject.instance_variable_get(:@process)
       win_code = Array.new(Game::DIGITS_COUNT, '+')
       subject.instance_variable_set(:@code, win_code)
-      expect(process).to receive(:turn_process).with(win_code, CODE).once
+      expect(process).to receive(:secret_code_proc).with(win_code.join, CODE).once
       subject.start_process(CODE)
+    end
+  end
+
+  context 'when testing #calculate method' do
+    it 'calculates param tries' do
+      subject.instance_variable_set(:@attempts, 2)
+      subject.instance_variable_set(:@hints, [1, 2])
+      subject.calculate(:tries, Game::EASY)
+    end
+  end
+
+  context 'used #decrease_attempts method' do
+    it 'decreases attempts by one when used' do
+      attempts = 3
+      subject.instance_variable_set(:@attempts, 3)
+      expect(subject.decrease_attempts).to eq attempts - 1
     end
   end
 end

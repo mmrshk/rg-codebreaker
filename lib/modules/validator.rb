@@ -17,7 +17,7 @@ module Validator
   end
 
   def check_name_length(name)
-    return true if name.size.between?(3,20)
+    return true if name.size.between?(3, 20)
 
     renderer.registration_name_length_error
   end

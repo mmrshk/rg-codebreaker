@@ -5,15 +5,15 @@ class Game
   DIFFICULTIES = {
     easy: {
       attempts: 15,
-      hints: 2,
+      hints: 2
     },
     medium: {
       attempts: 10,
-      hints: 1,
+      hints: 1
     },
     hell: {
       attempts: 5,
-      hints: 1,
+      hints: 1
     }
   }.freeze
   EASY = :easy
@@ -36,17 +36,20 @@ class Game
     @attempts = attempts
   end
 
-  def attempts_left
+  def decrease_attempts
     @attempts -= 1
   end
 
   def start_process(command)
-    @process.secret_code_process(@code, command)
+    secret_code = []
+    @code.each { |el| secret_code << el.dup }
+
+    @process.secret_code_proc(secret_code.join, command)
   end
 
   def calculate(param, difficulty)
     initial_params = Game::DIFFICULTIES[difficulty.to_sym]
-    
+
     calculated = { tries: initial_params[:attempts] - @attempts,
                    suggestions: initial_params[:hints] - @hints.length }
     calculated[param]

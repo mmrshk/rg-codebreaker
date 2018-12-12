@@ -1,27 +1,27 @@
 # frozen_string_literal: true
 
 class Processor
-  def secret_code_process(code, guess)
+  def secret_code_proc(code, guess)
+    code = code.to_i.digits.reverse
     guess = guess.to_i.digits.reverse
-    result_array = place_match(code, guess)
-    out_of_place_match(result_array, code, guess)
-  end
+    result = ''
 
-  def place_match(code, guess)
-    result = Array.new(Game::DIGITS_COUNT, ' ')
     code.zip(guess).each_with_index do |el, index|
-      result[index] = '+' if el.first == el.last
-    end
-    result
-  end
+      next unless el.first == el.last
 
-  def out_of_place_match(result, code, guess)
-    matched_values = code & guess
-    guess.each_with_index do |number, index|
-      if matched_values.include?(number)
-        result[index] = '-' unless result[index] == '+'
-      end
+      result += '+'
+      guess[index], code[index] = nil
     end
+
+    [guess, code].each(&:compact!)
+
+    guess.each do |number|
+      next unless code.include?(number)
+
+      result += '-'
+      code.delete_at(code.index(number))
+    end
+
     result
   end
 

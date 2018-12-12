@@ -1,18 +1,17 @@
 # frozen_string_literal: true
 
 class Statistics
-  def stats(menu_object)
-    list = menu_object.data.load
-    hell = difficulty(list, Game::HELL)
-    medium = difficulty(list, Game::MEDIUM)
-    easy = difficulty(list, Game::EASY)
+  def stats(data)
+    list = data.load
+    hell = difficulty(list, Game::HELL.to_s)
+    medium = difficulty(list, Game::MEDIUM.to_s)
+    easy = difficulty(list, Game::EASY.to_s)
     list = hell + medium + easy
-    list.each_with_index { |key, index| puts "#{index + 1}: #{key}" }
-    menu_object.game_menu
+    render_stats(list)
   end
 
-  def stats_sort(players_array)
-    players_array.sort_by! { |k| [k[:attempts_used], k[:hints_used]] }.reverse
+  def difficulty(list, difficulty)
+    stats_sort(select_difficulty(list, difficulty))
   end
 
   def select_difficulty(list, difficulty)
@@ -21,7 +20,14 @@ class Statistics
     difficulty_array
   end
 
-  def difficulty(list, difficulty)
-    stats_sort(select_difficulty(list, difficulty))
+  def stats_sort(players_array)
+    players_array.sort_by! { |k| [k[:attempts_used], k[:hints_used]] }.reverse
+  end
+
+  def render_stats(list)
+    list.each_with_index do |key, index|
+      puts "#{index + 1}: "
+      key.each { |el, value| puts "#{el}:#{value}" }
+    end
   end
 end

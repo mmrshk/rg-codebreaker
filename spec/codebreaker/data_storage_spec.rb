@@ -4,18 +4,20 @@ require 'spec_helper'
 
 RSpec.describe DataStorage do
   before do
-    stub_const('FILE_NAME', 'database/data_test.yml')
+    stub_const('DataStorage::FILE_NAME', 'database/data_test.yml')
   end
   TEST_OBJECT = {
-    name: 'Lolly',
+    name: '',
     difficulty: Game::EASY,
-    attempts_used: 0,
+    all_attempts: 15,
+    attempts_used: 15,
+    all_hints: 2,
     hints_used: 0
   }.freeze
 
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do
-      expect(File).to exist(FILE_NAME)
+      expect(File).to exist(DataStorage::FILE_NAME)
       subject.storage_exist?
     end
   end

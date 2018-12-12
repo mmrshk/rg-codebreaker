@@ -8,8 +8,8 @@ RSpec.describe Validator do
   EMPTY_NAME = ''
   EXIT = 'exit'
   NO = 'no'
-  CODE_V = "1111"
-  CODE_UNVALID = "7678"
+  CODE_V = '1111'
+  CODE_UNVALID = '7678'
 
   context 'testing #check_level method' do
     it 'returns message command_error' do

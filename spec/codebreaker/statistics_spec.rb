@@ -8,8 +8,7 @@ RSpec.describe Statistics do
   context 'when testing #stats method' do
     it 'returns stats' do
       expect(menu.data).to receive(:load).and_return([])
-      expect(menu).to receive(:game_menu)
-      subject.stats(menu)
+      subject.stats(menu.data)
     end
   end
 
@@ -36,6 +35,20 @@ RSpec.describe Statistics do
     it 'returns selected array' do
       list = [{ difficulty: 'hell' }]
       subject.select_difficulty(list, Game::HELL)
+    end
+  end
+
+  context 'when testing #render_stats' do
+    it 'returns list' do
+      list = [{
+        name: '',
+        difficulty: Game::EASY,
+        all_attempts: 15,
+        attempts_used: 15,
+        all_hints: 2,
+        hints_used: 0
+      }]
+      subject.render_stats(list)
     end
   end
 end

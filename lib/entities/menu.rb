@@ -11,12 +11,14 @@ class Menu
   HINT = :hint
   YES = :yes
   NO = :no
+  WIN = '++++'
 
   def initialize
     @data = DataStorage.new
     @renderer = Renderer.new
     @process = Processor.new
     @game = Game.new
+    @statistics = Statistics.new
   end
 
   def game_menu
@@ -45,7 +47,8 @@ class Menu
   end
 
   def stats
-    Statistics.new.stats(self) #redo
+    @statistics.stats(@data)
+    game_menu
   end
 
   def save_result
@@ -68,7 +71,7 @@ class Menu
   def secret_code
     until check_for_lose == false || win(choice_code_process(gets.chomp)) == true
       @renderer.promt_to_enter_secret_code_hint_exit
-      @game.attempts_left
+      @game.decrease_attempts
     end
 
     save_result
@@ -84,7 +87,7 @@ class Menu
 
   def choice_code_process(command)
     game_operations(command)
-    p @game.code
+
     p @game.start_process(command)
   end
 
@@ -94,7 +97,7 @@ class Menu
   end
 
   def win(result)
-    return if result != Array.new(Game::DIGITS_COUNT, '+')
+    return if result != WIN
 
     @renderer.win_game_message
     true
@@ -137,18 +140,17 @@ class Menu
 
   def choose_level(level)
     case level.to_sym
-    when Game::EASY
-       @game.generate_game(Game::DIFFICULTIES[Game::EASY])
-       @renderer.message(Game::EASY)
-    when Game::MEDIUM
-       @game.generate_game(Game::DIFFICULTIES[Game::MEDIUM])
-       @renderer.message(Game::MEDIUM)
-    when Game::HELL
-       @game.generate_game(Game::DIFFICULTIES[Game::HELL])
-       @renderer.message(Game::HELL)
+    when Game::EASY then call_generate_game(Game::EASY)
+    when Game::MEDIUM then call_generate_game(Game::MEDIUM)
+    when Game::HELL then call_generate_game(Game::HELL)
     when EXIT then game_menu
     else check_level
     end
+  end
+
+  def call_generate_game(difficulty)
+    @game.generate_game(Game::DIFFICULTIES[difficulty])
+    @renderer.message(difficulty)
   end
 
   def choice_save_process(command_name)

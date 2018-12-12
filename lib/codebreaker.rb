@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require_relative 'autoload'
+require './autoload.rb'
 
 module Codebreaker
 end
