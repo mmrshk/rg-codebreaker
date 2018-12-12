@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Processor do
-  CODE_ARRAY = [1, 2, 3, 4].freeze
+  CODE_ARRAY = [1, 2, 3, 4]
 
   context 'when testing #hint_processor method' do
     it 'checks if hint is displayed' do
