@@ -7,11 +7,13 @@ RSpec.describe Game do
 
   context 'testing #generate_secret_code method' do
     it 'checks that number mathes regex template' do
-      expect(subject.generate_secret_code.join).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
+      #binding.pry
+      secret_code = subject.send(:generate_secret_code).join
+      expect(secret_code).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
     end
 
     it 'returns array of integers' do
-      code_array = subject.generate_secret_code
+      code_array = subject.send(:generate_secret_code)
       int_array = code_array.select { |x| x.is_a? Integer }
       expect(code_array).to eq int_array
     end

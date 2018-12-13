@@ -18,7 +18,7 @@ RSpec.describe Statistics do
         { hints_used: 1, attempts_used: 2 },
         { hints_used: 2, attempts_used: 3 }
       ]
-      subject.stats_sort(players_array)
+      subject.send(:stats_sort, players_array)
     end
   end
 
@@ -27,14 +27,14 @@ RSpec.describe Statistics do
       list = []
       expect(subject).to receive(:select_difficulty)
       expect(subject).to receive(:stats_sort)
-      subject.difficulty(list, Game::HELL)
+      subject.send(:difficulty, list, Game::HELL)
     end
   end
 
   context 'when testing #select_difficulty method' do
     it 'returns selected array' do
       list = [{ difficulty: 'hell' }]
-      subject.select_difficulty(list, Game::HELL)
+      subject.send(:select_difficulty, list, Game::HELL)
     end
   end
 
@@ -48,7 +48,7 @@ RSpec.describe Statistics do
         all_hints: 2,
         hints_used: 0
       }]
-      subject.render_stats(list)
+      subject.send(:render_stats, list)
     end
   end
 end
