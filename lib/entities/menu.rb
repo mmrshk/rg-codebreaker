@@ -28,6 +28,8 @@ class Menu
     choice_menu_process(gets.chomp)
   end
 
+  private
+
   def rules
     @renderer.rules
     game_menu

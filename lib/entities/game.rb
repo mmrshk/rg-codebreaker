@@ -26,18 +26,10 @@ class Game
     @process = Processor.new
   end
 
-  def generate_secret_code
-    Array.new(DIGITS_COUNT) { rand(1..6) }
-  end
-
   def generate_game(hints:, attempts:)
     @code = generate_secret_code
     @hints = @code.sample(hints)
     @attempts = attempts
-  end
-
-  def decrease_attempts
-    @attempts -= 1
   end
 
   def start_process(command)
@@ -47,11 +39,21 @@ class Game
     @process.secret_code_proc(secret_code.join, command)
   end
 
+  def decrease_attempts
+    @attempts -= 1
+  end
+
   def calculate(param, difficulty)
     initial_params = Game::DIFFICULTIES[difficulty.to_sym]
 
     calculated = { tries: initial_params[:attempts] - @attempts,
                    suggestions: initial_params[:hints] - @hints.length }
     calculated[param]
+  end
+
+  private
+
+  def generate_secret_code
+    Array.new(DIGITS_COUNT) { rand(1..6) }
   end
 end
