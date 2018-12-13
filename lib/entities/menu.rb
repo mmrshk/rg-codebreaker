@@ -24,8 +24,7 @@ class Menu
   def game_menu
     @data.create unless @data.storage_exist?
     @renderer.start_message
-    @renderer.choice_options
-    choice_menu_process(gets.chomp)
+    choice_menu_process(ask(:choice_options))
   end
 
   private
@@ -41,44 +40,62 @@ class Menu
     secret_code
   end
 
-  def check_for_lose
-    return unless @game.attempts.zero?
-
-    @renderer.lost_game_message(@game.code)
-    false
-  end
-
   def stats
     @statistics.stats(@data)
     game_menu
   end
 
+  def ask(phrase_key = nil)
+    @renderer.message(phrase_key)
+    gets.chomp
+  end
+
   def save_result
-    @renderer.save_results_message
-    choice_save_process(gets.chomp)
+    choice_save_process(ask(:save_results_message))
   end
 
   def registration
-    @renderer.registration
-    @name = gets.chomp
-    check_name(@name)
+    @name = ask(:registration)
+    registration unless name_valid?
+  end
+
+  def name_valid?
+    return @renderer.registration_name_emptyness_error unless check_name_emptyness(@name)
+
+    return @renderer.registration_name_length_error unless check_name_length(@name)
+
+    true
   end
 
   def level_choice
-    @renderer.hard_level
-    @level = gets.chomp
+    @level = ask(:hard_level)
     choose_level(@level)
   end
 
   def secret_code
-    until check_for_lose == false || win(choice_code_process(gets.chomp)) == true
+    until lose?
+      break if player_wins?
+
       @renderer.promt_to_enter_secret_code_hint_exit
       @game.decrease_attempts
     end
 
+    game_menu
+  end
+
+  def player_wins?
+    return unless win(choice_code_process(gets.chomp))
+
     save_result
     @renderer.success_save_message
-    game_menu
+    false
+  end
+
+  def lose?
+    return if @game.attempts.positive?
+
+    @renderer.lost_game_message(@game.code)
+    false
   end
 
   def lost_hints
@@ -89,7 +106,6 @@ class Menu
 
   def choice_code_process(command)
     game_operations(command)
-
     p @game.start_process(command)
   end
 
@@ -107,7 +123,6 @@ class Menu
 
   def save_game_result
     list = @data.load
-
     object = {
       name: @name,
       difficulty: @level,
@@ -136,7 +151,17 @@ class Menu
     case command_name.to_sym
     when HINT then lost_hints
     when EXIT then game_menu
-    else check_command(command_name)
+    else valid_command?(command_name)
+    end
+  end
+
+  def valid_command?(command)
+    if command.to_i.zero?
+      @renderer.command_error
+      secret_code
+    elsif check_command_range(command).nil?
+      @renderer.command_int_error
+      secret_code
     end
   end
 
@@ -146,7 +171,9 @@ class Menu
     when Game::MEDIUM then call_generate_game(Game::MEDIUM)
     when Game::HELL then call_generate_game(Game::HELL)
     when EXIT then game_menu
-    else check_level
+    else
+      @renderer.command_error
+      level_choice
     end
   end
 
@@ -159,7 +186,9 @@ class Menu
     case command_name.to_sym
     when YES then save_game_result
     when NO then game_menu
-    else check_save
+    else
+      @renderer.command_error
+      save_result
     end
   end
 end

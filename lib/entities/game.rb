@@ -33,10 +33,7 @@ class Game
   end
 
   def start_process(command)
-    secret_code = []
-    @code.each { |el| secret_code << el.dup }
-
-    @process.secret_code_proc(secret_code.join, command)
+    @process.secret_code_proc(@code.join, command)
   end
 
   def decrease_attempts

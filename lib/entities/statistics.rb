@@ -11,7 +11,7 @@ class Statistics
   end
 
   private
-  
+
   def difficulty(list, difficulty)
     stats_sort(select_difficulty(list, difficulty))
   end

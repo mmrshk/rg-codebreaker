@@ -9,10 +9,6 @@ class Renderer
     message(:start_message)
   end
 
-  def choice_options
-    message(:choice_options)
-  end
-
   def rules
     message(:rules)
   end
@@ -27,14 +23,6 @@ class Renderer
 
   def win_game_message
     message(:win_game_message)
-  end
-
-  def registration
-    message(:registration)
-  end
-
-  def hard_level
-    message(:hard_level)
   end
 
   def promt_to_enter_secret_code_hint_exit

@@ -12,18 +12,32 @@ RSpec.describe Menu do
       expect(subject.data).to receive(:storage_exist?)
       expect(subject.data).to receive(:create)
       expect(subject.renderer).to receive(:start_message)
-      expect(subject.renderer).to receive(:choice_options)
       allow(subject).to receive(:gets).and_return('')
       expect(subject).to receive(:choice_menu_process).once
       subject.game_menu
     end
   end
 
+  context 'when testing #choice_code_process' do
+    it do
+      expect(subject).to receive(:game_operations).with(command)
+      expect(subject.game).to receive(:start_process).with(command)
+      subject.send(:choice_code_process, command)
+    end
+  end
+
+  context 'when testing #new_game method' do
+    it do
+      expect(subject).to receive(:registration)
+      expect(subject).to receive(:level_choice)
+      expect(subject).to receive(:secret_code)
+      subject.send(:new_game)
+    end
+  end
+
   context 'when #registration method' do
     it 'gets name of user' do
-      expect(subject.renderer).to receive(:registration)
-      allow(subject).to receive(:gets).and_return('Nika')
-      expect(subject).to receive(:check_name).once
+      allow(subject).to receive(:gets).and_return(CHAR * 4)
       subject.send(:registration)
     end
   end
@@ -44,20 +58,10 @@ RSpec.describe Menu do
     end
   end
 
-  context 'when testing #new_game method' do
-    it do
-      expect(subject).to receive(:registration)
-      expect(subject).to receive(:level_choice)
-      expect(subject).to receive(:secret_code)
-      subject.send(:new_game)
-    end
-  end
-
   context 'when testing #save_result method' do
     it 'expexts the choice of user' do
-      expect(subject.renderer).to receive(:save_results_message)
       allow(subject).to receive(:gets).and_return(Menu::YES.to_s)
-      expect(subject).to receive(:choice_save_process).once
+      expect(subject).to receive(:choice_save_process)
       subject.send(:save_result)
     end
   end
@@ -73,9 +77,7 @@ RSpec.describe Menu do
 
   context 'when testing #level_choice method' do
     it 'checks input of user' do
-      expect(subject.renderer).to receive(:hard_level)
       allow(subject).to receive(:gets).and_return(Game::HELL.to_s)
-      expect(subject).to receive(:choose_level).once
       subject.send(:level_choice)
     end
   end
@@ -94,15 +96,15 @@ RSpec.describe Menu do
     end
   end
 
-  context 'when #check_for_lose method' do
+  context 'when #lose? method' do
     it 'returns lost_game_message when attempts not eq to zero' do
       subject.game.instance_variable_set(:@attempts, 1)
-      expect(subject.send(:check_for_lose)).to be nil
+      expect(subject.send(:lose?)).to be nil
     end
 
     it 'returns nil' do
       subject.game.instance_variable_set(:@attempts, 0)
-      expect(subject.send(:check_for_lose)).to be false
+      expect(subject.send(:lose?)).to be false
     end
   end
 
@@ -164,9 +166,10 @@ RSpec.describe Menu do
       subject.send(:choose_level, Menu::EXIT)
     end
 
-    it 'generates easy_game' do
+    it 'returns command_error' do
       allow(subject).to receive(:gets).and_return(Game::HELL)
-      expect(subject).to receive(:check_level)
+      expect(subject).to receive(:level_choice)
+      expect(subject.renderer).to receive(:command_error)
       subject.send(:choose_level, Menu::STATS.to_s + CHAR)
     end
   end
@@ -180,7 +183,7 @@ RSpec.describe Menu do
 
     it 'returns #check_command' do
       allow(subject).to receive(:gets).and_return([])
-      expect(subject).to receive(:check_command)
+      expect(subject).to receive(:valid_command?)
       subject.send(:game_operations, Menu::STATS.to_s + CHAR)
     end
   end
@@ -192,25 +195,12 @@ RSpec.describe Menu do
       subject.send(:choice_save_process, Menu::YES.to_s)
     end
 
-    it 'returns check_save' do
-      expect(subject).to receive(:check_save)
+    it 'returns #save_result' do
+      allow(subject).to receive(:gets).and_return(Menu::EXIT.to_s + CHAR)
+      expect(subject.renderer).to receive(:command_error)
+      expect(subject).to receive(:save_result)
       subject.send(:choice_save_process, Menu::EXIT.to_s + CHAR)
     end
   end
 
-  context 'when testing #call_generate_game' do
-    it do
-      difficulty = Game::EASY
-      expect(subject.game).to receive(:generate_game).with(Game::DIFFICULTIES[difficulty])
-      subject.send(:call_generate_game, difficulty)
-    end
-  end
-
-  context 'when testing #choice_code_process' do
-    it do
-      expect(subject).to receive(:game_operations).with(command)
-      expect(subject.game).to receive(:start_process).with(command)
-      subject.send(:choice_code_process, command)
-    end
-  end
 end

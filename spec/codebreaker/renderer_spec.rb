@@ -12,13 +12,6 @@ RSpec.describe Renderer do
     end
   end
 
-  context 'when #choice_options method' do
-    it 'return choice_options' do
-      expect(subject).to receive(:message).with(:choice_options)
-      subject.choice_options
-    end
-  end
-
   context 'when #rules method' do
     it 'return rules' do
       expect(subject).to receive(:message).with(:rules)
@@ -44,20 +37,6 @@ RSpec.describe Renderer do
     it 'return win_game_message' do
       expect(subject).to receive(:message).with(:win_game_message)
       subject.win_game_message
-    end
-  end
-
-  context 'when #registration method' do
-    it 'return registration' do
-      expect(subject).to receive(:message).with(:registration)
-      subject.registration
-    end
-  end
-
-  context 'when #hard_level method' do
-    it 'return hard_level' do
-      expect(subject).to receive(:message).with(:hard_level)
-      subject.hard_level
     end
   end
 
