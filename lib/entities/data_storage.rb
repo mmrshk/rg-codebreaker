@@ -4,14 +4,12 @@ class DataStorage
   FILE_NAME = 'database/data.yml'
 
   def create
-    object = []
     File.new(FILE_NAME, 'w')
-    File.write(FILE_NAME, object.to_yaml)
+    File.write(FILE_NAME, [].to_yaml)
   end
 
   def load
-    object = [Menu]
-    YAML.load(File.open(FILE_NAME), object) if storage_exist?
+    YAML.load(File.open(FILE_NAME), [Menu]) if storage_exist?
   end
 
   def save(object)
@@ -20,5 +18,10 @@ class DataStorage
 
   def storage_exist?
     File.exist?(FILE_NAME)
+  end
+
+  def save_game_result(object)
+    create unless storage_exist?
+    save(load.push(object))
   end
 end

@@ -3,11 +3,10 @@
 class Statistics
   def stats(data)
     list = data.load
-    hell = difficulty(list, Game::HELL.to_s)
-    medium = difficulty(list, Game::MEDIUM.to_s)
-    easy = difficulty(list, Game::EASY.to_s)
-    list = hell + medium + easy
-    render_stats(list)
+    easy = difficulty(list, Game::DIFFICULTIES.keys[0].to_s)
+    medium = difficulty(list, Game::DIFFICULTIES.keys[1].to_s)
+    hell = difficulty(list, Game::DIFFICULTIES.keys[2].to_s)
+    hell + medium + easy
   end
 
   private
@@ -24,12 +23,5 @@ class Statistics
 
   def stats_sort(players_array)
     players_array.sort_by! { |k| [k[:attempts_used], k[:hints_used]] }.reverse
-  end
-
-  def render_stats(list)
-    list.each_with_index do |key, index|
-      puts "#{index + 1}: "
-      key.each { |el, value| puts "#{el}:#{value}" }
-    end
   end
 end

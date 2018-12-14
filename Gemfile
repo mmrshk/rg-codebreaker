@@ -18,6 +18,8 @@ group :development, :test do
   gem 'simplecov', require: false, group: :test
 
   gem 'rspec_junit_formatter', group: :test
+
+  gem 'rubocop-rspec'
 end
 
 gem 'i18n'

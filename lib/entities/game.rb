@@ -16,9 +16,8 @@ class Game
       hints: 1
     }
   }.freeze
-  EASY = :easy
-  MEDIUM = :medium
-  HELL = :hell
+  RANGE = (1..6).freeze
+  WIN = '++++'
 
   attr_reader :attempts, :hints, :code
 
@@ -36,8 +35,19 @@ class Game
     @process.secret_code_proc(@code.join, command)
   end
 
-  def decrease_attempts
+  def decrease_attempts!
     @attempts -= 1
+  end
+
+  def to_h(name, level)
+    {
+      name: name,
+      difficulty: level,
+      all_attempts: DIFFICULTIES[level.to_sym][:attempts],
+      attempts_used: calculate(:tries, level),
+      all_hints: DIFFICULTIES[level.to_sym][:hints],
+      hints_used: calculate(:suggestions, level)
+    }
   end
 
   def calculate(param, difficulty)
@@ -48,9 +58,17 @@ class Game
     calculated[param]
   end
 
+  def hints_spent?
+    @hints.empty?
+  end
+
+  def win?(result)
+    result == WIN
+  end
+
   private
 
   def generate_secret_code
-    Array.new(DIGITS_COUNT) { rand(1..6) }
+    Array.new(DIGITS_COUNT) { rand(RANGE) }
   end
 end

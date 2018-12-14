@@ -27,28 +27,14 @@ RSpec.describe Statistics do
       list = []
       expect(subject).to receive(:select_difficulty)
       expect(subject).to receive(:stats_sort)
-      subject.send(:difficulty, list, Game::HELL)
+      subject.send(:difficulty, list, Game::DIFFICULTIES[:hell])
     end
   end
 
   context 'when testing #select_difficulty method' do
     it 'returns selected array' do
       list = [{ difficulty: 'hell' }]
-      subject.send(:select_difficulty, list, Game::HELL)
-    end
-  end
-
-  context 'when testing #render_stats' do
-    it 'returns list' do
-      list = [{
-        name: '',
-        difficulty: Game::EASY,
-        all_attempts: 15,
-        attempts_used: 15,
-        all_hints: 2,
-        hints_used: 0
-      }]
-      subject.send(:render_stats, list)
+      subject.send(:select_difficulty, list, Game::DIFFICULTIES[:hell])
     end
   end
 end

@@ -4,6 +4,13 @@ require 'spec_helper'
 
 RSpec.describe Renderer do
   CODE_R = '1111'
+  context 'when #message method' do
+    it 'return puts I18n' do
+      msg = :start_message
+      expect(I18n).to receive(:t).with(:start_message, {})
+      subject.message(msg)
+    end
+  end
 
   context 'when #start_message method' do
     it 'return start_message' do

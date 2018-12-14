@@ -1,14 +1,12 @@
 en:
   start_message: "Welcome to CodeBreaker"
   choice_options: "Choose option:
-  1. start
-  2. rules
-  3. stats
-  4. exit"
+  1. %{start}
+  2. %{rules}
+  3. %{stats}
+  4. %{exit}"
   hard_level: "Which level you do you want to play?
-  1. easy
-  2. medium
-  3. hell"
+  %{levels}"
   goodbye_message: "We are waiting for you. Come back!"
   command_error: "You have passed unexpected command. Please choose one from listed commands"
   rules: "Codebreaker is a logic game in which a code-breaker tries to break a secret code created by a code-maker. The codemaker, which will be played by the application we’re going to write, creates a secret code of four numbers between 1 and 6.

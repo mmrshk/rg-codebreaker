@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 class Processor
+  PLUS = '+'
+  MINUS = '-'
   def secret_code_proc(code, guess)
     code = code.to_i.digits.reverse
     guess = guess.to_i.digits.reverse
@@ -9,7 +11,7 @@ class Processor
     code.zip(guess).each_with_index do |el, index|
       next unless el.first == el.last
 
-      result += '+'
+      result += PLUS
       guess[index], code[index] = nil
     end
 
@@ -18,7 +20,7 @@ class Processor
     guess.each do |number|
       next unless code.include?(number)
 
-      result += '-'
+      result += MINUS
       code.delete_at(code.index(number))
     end
 
