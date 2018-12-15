@@ -3,9 +3,9 @@
 class Statistics
   def stats(data)
     list = data.load
-    easy = difficulty(list, Game::DIFFICULTIES.keys[0].to_s)
-    medium = difficulty(list, Game::DIFFICULTIES.keys[1].to_s)
-    hell = difficulty(list, Game::DIFFICULTIES.keys[2].to_s)
+    easy = difficulty(list, Game::DIFFICULTIES[:easy])
+    medium = difficulty(list, Game::DIFFICULTIES[:medium])
+    hell = difficulty(list, Game::DIFFICULTIES[:hell])
     hell + medium + easy
   end
 
@@ -17,7 +17,7 @@ class Statistics
 
   def select_difficulty(list, difficulty)
     difficulty_array = []
-    list.select { |key, _| difficulty_array.push(key) if key[:difficulty] == difficulty }
+    list.select { |key, _| difficulty_array.push(key) if key[:all_attempts] == difficulty[:attempts] }
     difficulty_array
   end
 

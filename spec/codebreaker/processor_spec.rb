@@ -3,13 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe Processor do
-  CODE_ARRAY = [1, 2, 3, 4]
-
-  context 'when testing #hint_processor method' do
-    it 'checks if hint is displayed' do
-      subject.hint_process(CODE_ARRAY)
-    end
-  end
   context 'when testing #secret_code_proc method' do
     [
       ['1234', '1234', '++++'], ['1234', '4321', '----'], ['1231', '1234', '+++'],

@@ -62,6 +62,10 @@ class Game
     @hints.empty?
   end
 
+  def hint_process
+    @hints.pop
+  end
+
   def win?(result)
     result == WIN
   end

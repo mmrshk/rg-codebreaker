@@ -19,7 +19,6 @@ class Menu
   def initialize
     @data = DataStorage.new
     @renderer = Renderer.new
-    @process = Processor.new
     @game = Game.new
     @statistics = Statistics.new
   end
@@ -62,17 +61,14 @@ class Menu
 
   def registration
     @name = ask(:registration)
-    registration unless name_valid
+    unless name_valid?
+      @renderer.registration_name_length_error
+      registration
+    end
   end
 
-  def name_valid
-    if !check_emptyness(@name)
-      @renderer.registration_name_emptyness_error
-    elsif !check_length(@name)
-      @renderer.registration_name_length_error
-    else
-      true
-    end
+  def name_valid?
+    !check_emptyness(@name) && check_length(@name)
   end
 
   def level_choice
@@ -102,33 +98,27 @@ class Menu
     return if @game.attempts.positive?
 
     @renderer.lost_game_message(@game.code)
-    false
+    true
   end
 
-  def lost_hints
+  def take_a_hint!
     return @renderer.no_hints_message? if @game.hints_spent?
 
-    @renderer.digit_on_place(@process.hint_process(@game.hints))
+    @renderer.digit_on_place(@game.hint_process)
   end
 
   def choice_code_process(command)
     case command
-    when COMMANDS[:hint] then lost_hints
+    when COMMANDS[:hint] then take_a_hint!
     when COMMANDS[:exit] then game_menu
-    else valid_command(command)
+    else handle_command(command)
     end
   end
 
-  def valid_command(command)
-    if !string_of_int?(command)
-      @renderer.command_error
-      game_process
-    elsif check_command_range(command)
-      p @game.start_process(command)
-    else
-      @renderer.command_int_error
-      game_process
-    end
+  def handle_command(command)
+    return p @game.start_process(command) if check_command_range(command)
+    @renderer.command_error
+    game_process
   end
 
   def exit_from_game

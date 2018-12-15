@@ -3,7 +3,7 @@
 require 'spec_helper'
 
 RSpec.describe Renderer do
-  CODE_R = '1111'
+  CODE = '1111'
   context 'when #message method' do
     it 'return puts I18n' do
       msg = :start_message
@@ -56,8 +56,8 @@ RSpec.describe Renderer do
 
   context 'when #lost_game_message method' do
     it 'return lost_game_message' do
-      expect(subject).to receive(:message).with(:lost_game_message, { code: CODE_R })
-      subject.lost_game_message(CODE_R)
+      expect(subject).to receive(:message).with(:lost_game_message, { code: CODE })
+      subject.lost_game_message(CODE)
     end
   end
 
@@ -77,8 +77,8 @@ RSpec.describe Renderer do
 
   context 'when #digit_on_place method' do
     it 'return digit_on_place' do
-      expect(subject).to receive(:message).with(:digit_on_place, code: CODE_R)
-      subject.digit_on_place(CODE_R)
+      expect(subject).to receive(:message).with(:digit_on_place, code: CODE)
+      subject.digit_on_place(CODE)
     end
   end
 
