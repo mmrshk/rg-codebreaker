@@ -17,7 +17,7 @@ class Processor
   end
 
   def handle_matched_digits
-    code.each_with_index do |el, index|
+    code.each_with_index do |_, index|
       next unless code[index] == guess[index]
 
       @result += MATCHED_DIGIT_CHAR

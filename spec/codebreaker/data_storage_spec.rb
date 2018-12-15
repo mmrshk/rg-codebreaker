@@ -6,7 +6,7 @@ RSpec.describe DataStorage do
   before do
     stub_const('DataStorage::FILE_NAME', 'database/data_test.yml')
   end
-  let(:test_object) {
+  let(:test_object) do
     {
       name: '',
       difficulty: Game::DIFFICULTIES.keys.first,
@@ -15,7 +15,7 @@ RSpec.describe DataStorage do
       all_hints: 2,
       hints_used: 0
     }
-  }
+  end
 
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do

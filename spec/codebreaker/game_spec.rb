@@ -5,14 +5,13 @@ require 'spec_helper'
 RSpec.describe Game do
   CODE = '1111'
   LOSE_RESULT = '-+++'
-  CODE_ARRAY = [1, 2, 3, 4]
-  HINTS_ARRAY = [1, 2]
-  let(:valid_name) { 'a'*rand(3..20) }
+  let(:hints_array) { [1, 2] }
+  let(:valid_name) { 'a' * rand(3..20) }
 
   context 'when testing #hint_processor method' do
     it 'returnes last el of hints array' do
-      subject.instance_variable_set(:@hints, HINTS_ARRAY)
-      expect(HINTS_ARRAY.pop).to eq 2
+      subject.instance_variable_set(:@hints, hints_array)
+      expect(hints_array.pop).to eq 2
       subject.hint_process
     end
   end
@@ -50,7 +49,7 @@ RSpec.describe Game do
   context 'when testing #calculate method' do
     it 'calculates param tries' do
       subject.instance_variable_set(:@attempts, 2)
-      subject.instance_variable_set(:@hints, HINTS_ARRAY)
+      subject.instance_variable_set(:@hints, hints_array)
       subject.calculate(:tries, Game::DIFFICULTIES.keys.first)
     end
   end
@@ -88,7 +87,7 @@ RSpec.describe Game do
   context 'when testing #to_h method' do
     it 'returns hash' do
       subject.instance_variable_set(:@attempts, 2)
-      subject.instance_variable_set(:@hints, HINTS_ARRAY)
+      subject.instance_variable_set(:@hints, hints_array)
       expect(subject.to_h(valid_name, Game::DIFFICULTIES.keys.first).is_a?(Hash)).to be true
     end
   end

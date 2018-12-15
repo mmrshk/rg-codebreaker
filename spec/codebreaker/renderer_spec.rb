@@ -56,7 +56,7 @@ RSpec.describe Renderer do
 
   context 'when #lost_game_message method' do
     it 'return lost_game_message' do
-      expect(subject).to receive(:message).with(:lost_game_message, { code: CODE })
+      expect(subject).to receive(:message).with(:lost_game_message, code: CODE)
       subject.lost_game_message(CODE)
     end
   end

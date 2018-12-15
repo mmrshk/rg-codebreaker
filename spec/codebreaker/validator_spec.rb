@@ -3,9 +3,9 @@
 require 'spec_helper'
 
 RSpec.describe Validator do
-  let(:valid_name) { 'a'*rand(3..20) }
+  let(:valid_name) { 'a' * rand(3..20) }
   EMPTY_NAME = ''
-  INVALID_RANGE = 7..9
+  INVALID_RANGE = (7..9).freeze
   ZERO = 0
 
   let(:menu) { Menu.new }

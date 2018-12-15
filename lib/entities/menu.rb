@@ -117,6 +117,7 @@ class Menu
 
   def handle_command(command)
     return p @game.start_process(command) if check_command_range(command)
+
     @renderer.command_error
     game_process
   end

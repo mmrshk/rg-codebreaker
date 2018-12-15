@@ -3,20 +3,21 @@
 require 'spec_helper'
 
 RSpec.describe Menu do
-  HINTS_ARRAY = [1, 2]
-
+  let(:hints_array) { [1, 2] }
   let(:statistics) { Statistics.new }
   let(:command) { '1111' }
-  let(:valid_name) { 'a'*rand(3..20) }
-  let(:unvalid_name) { 'a'*rand(0..2) }
-  let(:list) { [{
-    name: valid_name,
-    difficulty: Game::DIFFICULTIES.keys.first.to_s,
-    all_attempts: 15,
-    attempts_used: 15,
-    all_hints: 2,
-    hints_used: 0
-  }]}
+  let(:valid_name) { 'a' * rand(3..20) }
+  let(:unvalid_name) { 'a' * rand(0..2) }
+  let(:list) do
+    [{
+      name: valid_name,
+      difficulty: Game::DIFFICULTIES.keys.first.to_s,
+      all_attempts: 15,
+      attempts_used: 15,
+      all_hints: 2,
+      hints_used: 0
+    }]
+  end
 
   context 'when testing #game_menu method' do
     it 'works with choice_options' do
@@ -114,7 +115,7 @@ RSpec.describe Menu do
       subject.instance_variable_set(:@name, valid_name)
       subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first.to_s)
       subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[:easy][:attempts])
-      subject.game.instance_variable_set(:@hints, HINTS_ARRAY)
+      subject.game.instance_variable_set(:@hints, hints_array)
       expect(subject.data).to receive(:save_game_result)
       subject.send(:choice_save_process, Menu::CHOOSE_COMMANDS[:yes].to_s)
     end
