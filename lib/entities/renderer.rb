@@ -25,24 +25,20 @@ class Renderer
     message(:win_game_message)
   end
 
-  def promt_to_enter_secret_code_hint_exit
-    message(:promt_to_enter_secret_code_hint_exit)
+  def round_message
+    message(:round_message)
   end
 
   def lost_game_message(code)
     message(:lost_game_message, code: code)
   end
 
-  def success_save_message
-    message(:success_save_message)
-  end
-
   def no_hints_message?
     message(:have_no_hints_message)
   end
 
-  def digit_on_place(code)
-    message(:digit_on_place, code: code)
+  def print_hint_number(code)
+    message(:print_hint_number, code: code)
   end
 
   def registration_name_emptyness_error

@@ -7,7 +7,7 @@ RSpec.describe Renderer do
   context 'when #message method' do
     it 'return puts I18n' do
       msg = :start_message
-      expect(I18n).to receive(:t).with(:start_message, {})
+      expect(I18n).to receive(:t).with(msg, {})
       subject.message(msg)
     end
   end
@@ -47,10 +47,10 @@ RSpec.describe Renderer do
     end
   end
 
-  context 'when #promt_to_enter_secret_code_hint_exit method' do
+  context 'when #round_message method' do
     it 'return promt_to_enter_secret_code_hint_exit' do
-      expect(subject).to receive(:message).with(:promt_to_enter_secret_code_hint_exit)
-      subject.promt_to_enter_secret_code_hint_exit
+      expect(subject).to receive(:message).with(:round_message)
+      subject.round_message
     end
   end
 
@@ -61,13 +61,6 @@ RSpec.describe Renderer do
     end
   end
 
-  context 'when #success_save_message method' do
-    it 'return success_save_message' do
-      expect(subject).to receive(:message).with(:success_save_message)
-      subject.success_save_message
-    end
-  end
-
   context 'when #no_hints_message? method' do
     it 'return no_hints_message?' do
       expect(subject).to receive(:message).with(:have_no_hints_message)
@@ -75,10 +68,10 @@ RSpec.describe Renderer do
     end
   end
 
-  context 'when #digit_on_place method' do
-    it 'return digit_on_place' do
-      expect(subject).to receive(:message).with(:digit_on_place, code: CODE)
-      subject.digit_on_place(CODE)
+  context 'when #print_hint_number method' do
+    it 'return print_hint_number' do
+      expect(subject).to receive(:message).with(:print_hint_number, code: CODE)
+      subject.print_hint_number(CODE)
     end
   end
 

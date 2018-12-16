@@ -19,6 +19,7 @@ RSpec.describe DataStorage do
 
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do
+      subject.create
       expect(File).to exist(DataStorage::FILE_NAME)
       subject.storage_exist?
     end

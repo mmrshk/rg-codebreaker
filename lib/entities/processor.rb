@@ -16,6 +16,8 @@ class Processor
     result
   end
 
+  private
+  
   def handle_matched_digits
     code.each_with_index do |_, index|
       next unless code[index] == guess[index]

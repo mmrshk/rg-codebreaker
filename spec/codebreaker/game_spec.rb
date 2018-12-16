@@ -8,11 +8,11 @@ RSpec.describe Game do
   let(:hints_array) { [1, 2] }
   let(:valid_name) { 'a' * rand(3..20) }
 
-  context 'when testing #hint_processor method' do
+  context 'when testing #take_a_hint! method' do
     it 'returnes last el of hints array' do
       subject.instance_variable_set(:@hints, hints_array)
       expect(hints_array.pop).to eq 2
-      subject.hint_process
+      subject.take_a_hint!
     end
   end
 
@@ -32,7 +32,7 @@ RSpec.describe Game do
   context 'when #generate_game method' do
     it 'returns message' do
       initial_params = Game::DIFFICULTIES[:easy]
-      subject.generate_game(hints: initial_params[:hints], attempts: initial_params[:attempts])
+      subject.generate(hints: initial_params[:hints], attempts: initial_params[:attempts])
     end
   end
 
@@ -76,7 +76,7 @@ RSpec.describe Game do
 
   context 'when testing #win? method' do
     it 'returns true' do
-      expect(subject.win?(Game::WIN)).to be true
+      expect(subject.win?(Game::WIN_RESULT)).to be true
     end
 
     it 'returns false' do

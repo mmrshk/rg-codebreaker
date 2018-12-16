@@ -17,7 +17,7 @@ class Game
     }
   }.freeze
   RANGE = (1..6).freeze
-  WIN = '++++'
+  WIN_RESULT = '++++'
 
   attr_reader :attempts, :hints, :code
 
@@ -25,14 +25,14 @@ class Game
     @process = Processor.new
   end
 
-  def generate_game(hints:, attempts:)
+  def generate(hints:, attempts:)
     @code = generate_secret_code
     @hints = @code.sample(hints)
     @attempts = attempts
   end
 
   def start_process(command)
-    @process.secret_code_proc(@code.join, command)
+    @process.secret_code_proc(code.join, command)
   end
 
   def decrease_attempts!
@@ -59,15 +59,15 @@ class Game
   end
 
   def hints_spent?
-    @hints.empty?
+    hints.empty?
   end
 
-  def hint_process
-    @hints.pop
+  def take_a_hint!
+    hints.pop
   end
 
   def win?(result)
-    result == WIN
+    result == WIN_RESULT
   end
 
   private

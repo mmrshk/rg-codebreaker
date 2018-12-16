@@ -32,14 +32,13 @@ en:
   easy: "You had to 2 hints and 15 attempts"
   medium: "You had to 1 hint and 10 attempts"
   hell: "You had to 1 hint and 5 attempts"
-  promt_to_enter_secret_code_hint_exit: "1. Enter your secret code
+  round_message: "1. Enter your secret code
   2. hint
   3. exit "
   guess: "Opps, secret code must to be from four digits in range from 1 to 6"
   lost_game_message: "Oh, your attempts ended... Your code was: %{code}"
   win_game_message: "Yayy, u won the game! Congrats!"
   save_results_message: "Do you want to save result? 1. yes 2. no"
-  success_save_message: "Your result was saved"
   have_no_hints_message: "Oh, your hints ended"
-  digit_on_place: "Hint number: %{code}"
+  print_hint_number: "Hint number: %{code}"
   registration_name_length_error: "It must be more than 3 and less than 20 symbols."

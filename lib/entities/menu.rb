@@ -12,8 +12,7 @@ class Menu
     hint: 'hint'
   }.freeze
   CHOOSE_COMMANDS = {
-    yes: 'yes',
-    no: 'no'
+    yes: 'yes'
   }.freeze
 
   def initialize
@@ -24,7 +23,7 @@ class Menu
   end
 
   def game_menu
-    @renderer.start_message
+    renderer.start_message
     choice_menu_process(ask(:choice_options,
                             start: COMMANDS[:start],
                             rules: COMMANDS[:rules],
@@ -35,7 +34,7 @@ class Menu
   private
 
   def rules
-    @renderer.rules
+    renderer.rules
     game_menu
   end
 
@@ -46,23 +45,23 @@ class Menu
   end
 
   def stats
-    render_stats(@statistics.stats(@data))
+    render_stats(@statistics.stats(data)) if data.load
     game_menu
   end
 
   def ask(phrase_key = nil, hashee = {})
-    @renderer.message(phrase_key, hashee)
+    renderer.message(phrase_key, hashee) if phrase_key
     gets.chomp
   end
 
   def save_result
-    choice_save_process(ask(:save_results_message))
+    data.save_game_result(game.to_h(@name, @level)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
   end
 
   def registration
     @name = ask(:registration)
     unless name_valid?
-      @renderer.registration_name_length_error
+      renderer.registration_name_length_error
       registration
     end
   end
@@ -77,53 +76,53 @@ class Menu
   end
 
   def game_process
-    until player_lose || player_wins
-      @renderer.promt_to_enter_secret_code_hint_exit
-      @game.decrease_attempts!
+    while game.attempts.positive?
+      return handle_win if player_wins?
+  
+      renderer.round_message
+      game.decrease_attempts!
     end
+    handle_lose
+  end
 
+  def player_wins?
+    game.win?(choice_code_process(gets.chomp))
+  end
+
+  def handle_win
+    renderer.win_game_message
+    save_result
     game_menu
   end
 
-  def player_wins
-    return if !@game.win?(choice_code_process(gets.chomp))
-
-    @renderer.win_game_message
-    save_result
-    @renderer.success_save_message
-    true
+  def handle_lose
+    renderer.lost_game_message(game.code)
+    game_menu
   end
 
-  def player_lose
-    return if @game.attempts.positive?
+  def hint_process!
+    return renderer.no_hints_message? if game.hints_spent?
 
-    @renderer.lost_game_message(@game.code)
-    true
-  end
-
-  def take_a_hint!
-    return @renderer.no_hints_message? if @game.hints_spent?
-
-    @renderer.digit_on_place(@game.hint_process)
+    renderer.print_hint_number(game.take_a_hint!)
   end
 
   def choice_code_process(command)
     case command
-    when COMMANDS[:hint] then take_a_hint!
+    when COMMANDS[:hint] then hint_process!
     when COMMANDS[:exit] then game_menu
     else handle_command(command)
     end
   end
 
   def handle_command(command)
-    return p @game.start_process(command) if check_command_range(command)
+    return p game.start_process(command) if check_command_range(command)
 
-    @renderer.command_error
+    renderer.command_error
     game_process
   end
 
   def exit_from_game
-    @renderer.goodbye_message
+    renderer.goodbye_message
     exit
   end
 
@@ -134,32 +133,22 @@ class Menu
     when COMMANDS[:rules] then rules
     when COMMANDS[:stats] then stats
     else
-      @renderer.command_error
+      renderer.command_error
       game_menu
     end
   end
 
   def choose_level(level)
-    return call_generate_game(level.to_sym) if !Game::DIFFICULTIES[level.to_sym].nil?
+    return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
     return game_menu if level == COMMANDS[:exit]
 
-    @renderer.command_error
+    renderer.command_error
     level_choice
   end
 
-  def call_generate_game(difficulty)
-    @game.generate_game(Game::DIFFICULTIES[difficulty])
-    @renderer.message(difficulty)
-  end
-
-  def choice_save_process(command_name)
-    case command_name
-    when CHOOSE_COMMANDS[:yes] then @data.save_game_result(@game.to_h(@name, @level))
-    when CHOOSE_COMMANDS[:no] then game_menu
-    else
-      @renderer.command_error
-      save_result
-    end
+  def generate_game(difficulty)
+    game.generate(Game::DIFFICULTIES[difficulty])
+    renderer.message(difficulty)
   end
 
   def render_stats(list)

@@ -3,6 +3,8 @@
 require 'rspec'
 require 'yaml'
 require 'simplecov'
+require_relative '../autoload.rb'
+
 SimpleCov.start do
   minimum_coverage 95
 end
