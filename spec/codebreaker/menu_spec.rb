@@ -75,11 +75,8 @@ RSpec.describe Menu do
     end
 
     it 'return registration_name_length_error' do
-      name = subject.instance_variable_set(:@name, invalid_name)
+      subject.instance_variable_set(:@name, invalid_name)
       expect(subject.send(:name_valid?)).to be false
-
-      #expect(subject).to receive(:ask).with(:registration).and_return(name)
-      #expect(subject.renderer).to receive(:registration_name_length_error)
       expect(subject).to receive(:registration)
       subject.send(:registration)
     end

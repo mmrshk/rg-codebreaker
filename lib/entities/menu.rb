@@ -78,7 +78,7 @@ class Menu
   def game_process
     while game.attempts.positive?
       return handle_win if player_wins?
-  
+
       renderer.round_message
       game.decrease_attempts!
     end

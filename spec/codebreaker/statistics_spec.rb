@@ -6,7 +6,8 @@ RSpec.describe Statistics do
   let(:menu) { Menu.new }
 
   context 'when testing #stats method' do
-    let(:player_1)  { {
+    let(:player_1) do
+      {
         name: '',
         difficulty: Game::DIFFICULTIES.keys.first,
         all_attempts: 15,
@@ -14,8 +15,9 @@ RSpec.describe Statistics do
         all_hints: 2,
         hints_used: 0
       }
-    }
-    let(:player_2) { {
+    end
+    let(:player_2) do
+      {
         name: '',
         difficulty: Game::DIFFICULTIES.keys.first,
         all_attempts: 15,
@@ -23,8 +25,9 @@ RSpec.describe Statistics do
         all_hints: 2,
         hints_used: 0
       }
-    }
-    let(:player_3)  { {
+    end
+    let(:player_3) do
+      {
         name: '',
         difficulty: Game::DIFFICULTIES.keys.first,
         all_attempts: 15,
@@ -32,7 +35,7 @@ RSpec.describe Statistics do
         all_hints: 2,
         hints_used: 0
       }
-    }
+    end
 
     it 'returns stats' do
       expect(menu.data).to receive(:load).and_return([player_1, player_2, player_3])
