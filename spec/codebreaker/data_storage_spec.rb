@@ -3,9 +3,15 @@
 require 'spec_helper'
 
 RSpec.describe DataStorage do
+  let(:path) { 'database/data_test.yml' }
+
   before do
+    File.new(path, 'w+')
     stub_const('DataStorage::FILE_NAME', 'database/data_test.yml')
   end
+
+  after { File.delete(path) }
+
   let(:test_object) do
     {
       name: '',
@@ -19,7 +25,6 @@ RSpec.describe DataStorage do
 
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do
-      subject.create
       expect(File).to exist(DataStorage::FILE_NAME)
       subject.storage_exist?
     end
@@ -31,15 +36,8 @@ RSpec.describe DataStorage do
     end
   end
 
-  context 'when testing #create' do
-    it 'creates new file' do
-      subject.create
-    end
-  end
-
   context 'when testing #load' do
     it 'load database' do
-      subject.create
       subject.save(test_object)
       expect(subject.load).to eq test_object
     end
