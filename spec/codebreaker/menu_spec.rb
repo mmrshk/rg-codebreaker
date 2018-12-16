@@ -47,6 +47,7 @@ RSpec.describe Menu do
   context 'when testing #stats method' do
     it 'returns stats' do
       statistics = subject.instance_variable_get(:@statistics)
+      expect(subject.data).to receive(:load).and_return(true)
       expect(statistics).to receive(:stats).with(subject.data)
       expect(subject).to receive(:render_stats)
       expect(subject).to receive(:game_menu)
