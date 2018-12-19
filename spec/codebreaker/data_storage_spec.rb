@@ -30,12 +30,6 @@ RSpec.describe DataStorage do
     end
   end
 
-  context 'when testing #save' do
-    it 'works fine only if instance of Game passed' do
-      subject.save(test_object)
-    end
-  end
-
   context 'when testing #load' do
     it 'load database' do
       subject.save(test_object)

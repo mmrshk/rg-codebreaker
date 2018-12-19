@@ -7,6 +7,7 @@ RSpec.describe Game do
   LOSE_RESULT = '-+++'
   let(:hints_array) { [1, 2] }
   let(:valid_name) { 'a' * rand(3..20) }
+  let(:code) { [1, 2, 3, 4]}
 
   context 'when testing #take_a_hint! method' do
     it 'returnes last el of hints array' do
@@ -29,9 +30,14 @@ RSpec.describe Game do
     end
   end
 
-  context 'when #generate_game method' do
+  context 'when #generate method' do
     it 'returns message' do
       initial_params = Game::DIFFICULTIES[:easy]
+      hints = code.sample(initial_params[:hints])
+      subject.instance_variable_set(:@attempts, initial_params[:attempts])
+      subject.instance_variable_set(:@hints, hints)
+      expect(subject.attempts).to eq initial_params[:attempts]
+      expect(subject.hints).to eq hints
       subject.generate(hints: initial_params[:hints], attempts: initial_params[:attempts])
     end
   end
@@ -48,9 +54,14 @@ RSpec.describe Game do
 
   context 'when testing #calculate method' do
     it 'calculates param tries' do
+      difficulty = Game::DIFFICULTIES.keys.first
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
-      subject.calculate(:tries, Game::DIFFICULTIES.keys.first)
+      calculated = { tries: Game::DIFFICULTIES[difficulty.to_sym][:attempts] - subject.attempts,
+                     suggestions: Game::DIFFICULTIES[difficulty.to_sym][:hints] - subject.hints.length}
+      expected_calculated = { tries: 13, suggestions: 0}
+      expect(calculated).to eq expected_calculated
+      subject.calculate(:tries, difficulty)
     end
   end
 
