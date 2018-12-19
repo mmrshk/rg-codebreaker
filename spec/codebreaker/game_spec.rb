@@ -12,8 +12,8 @@ RSpec.describe Game do
   context 'when testing #take_a_hint! method' do
     it 'returnes last el of hints array' do
       subject.instance_variable_set(:@hints, hints_array)
-      expect(hints_array.pop).to eq 2
-      subject.take_a_hint!
+      expected_value = subject.hints.last
+      expect(subject.take_a_hint!).to eq expected_value
     end
   end
 
