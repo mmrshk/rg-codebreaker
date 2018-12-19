@@ -15,9 +15,9 @@ group :development, :test do
 
   gem 'rspec'
 
-  gem 'simplecov', require: false, group: :test
+  gem 'simplecov', require: false
 
-  gem 'rspec_junit_formatter', group: :test
+  gem 'rspec_junit_formatter'
 
   gem 'rubocop-rspec'
 end

@@ -3,8 +3,8 @@
 require 'spec_helper'
 
 RSpec.describe Game do
-  CODE = '1111'
   LOSE_RESULT = '-+++'
+  let(:start_code) { '1111' }
   let(:hints_array) { [1, 2] }
   let(:valid_name) { 'a' * rand(3..20) }
   let(:code) { [1, 2, 3, 4]}
@@ -47,8 +47,8 @@ RSpec.describe Game do
       process = subject.instance_variable_get(:@process)
       win_code = Array.new(Game::DIGITS_COUNT, '+')
       subject.instance_variable_set(:@code, win_code)
-      expect(process).to receive(:secret_code_proc).with(win_code.join, CODE).once
-      subject.start_process(CODE)
+      expect(process).to receive(:secret_code_proc).with(win_code.join, start_code).once
+      subject.start_process(start_code)
     end
   end
 

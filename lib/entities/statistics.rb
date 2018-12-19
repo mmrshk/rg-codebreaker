@@ -16,9 +16,7 @@ class Statistics
   end
 
   def select_difficulty(list, difficulty)
-    difficulty_array = []
-    list.select { |key, _| difficulty_array.push(key) if key[:all_attempts] == difficulty[:attempts] }
-    difficulty_array
+    list.select { |key, _| key[:all_attempts] == difficulty[:attempts] }
   end
 
   def stats_sort(players_array)

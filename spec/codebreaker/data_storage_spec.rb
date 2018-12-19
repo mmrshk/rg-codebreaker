@@ -14,7 +14,7 @@ RSpec.describe DataStorage do
 
   let(:test_object) do
     {
-      name: '',
+      name: 'Denis',
       difficulty: Game::DIFFICULTIES.keys.first,
       all_attempts: 15,
       attempts_used: 15,
@@ -26,7 +26,7 @@ RSpec.describe DataStorage do
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do
       expect(File).to exist(DataStorage::FILE_NAME)
-      subject.storage_exist?
+      expect(subject.storage_exist?).to eq true
     end
   end
 
@@ -40,7 +40,7 @@ RSpec.describe DataStorage do
   context 'when testing #save_game_result' do
     it 'saves result' do
       subject.create
-      expect(subject).to receive(:save).with([].push(test_object))
+      expect(subject).to receive(:save).with(subject.load.push(test_object))
       subject.save_game_result(test_object)
     end
   end
