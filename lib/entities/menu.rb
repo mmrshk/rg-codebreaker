@@ -91,7 +91,6 @@ class Menu
     while game.attempts.positive?
       return handle_win if player_wins
 
-      p @game.code
       renderer.round_message
       game.decrease_attempts!
     end
@@ -117,7 +116,7 @@ class Menu
     guess = gets.chomp
 
     return true if game.win?(guess)
-  
+
     game.win?(choice_code_process(guess))
   end
 

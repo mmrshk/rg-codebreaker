@@ -46,7 +46,7 @@ class Game
   def to_h(name)
     {
       name: name,
-      difficulty: @level,
+      difficulty: @level.to_s,
       all_attempts: DIFFICULTIES[@level][:attempts],
       attempts_used: calculate(:tries),
       all_hints: DIFFICULTIES[@level][:hints],
