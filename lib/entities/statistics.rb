@@ -4,7 +4,7 @@ class Statistics
   def stats(list)
     hash = list.group_by { |score| score[:difficulty] }
     %i[hell medium easy].reduce([]) do |previous, current|
-      hash[current] ? previous + stats_sort(hash[current]) : previous
+      hash[current.to_s] ? previous + stats_sort(hash[current.to_s]) : previous
     end
   end
 

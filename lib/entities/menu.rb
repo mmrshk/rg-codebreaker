@@ -84,7 +84,9 @@ class Menu
 
   def generate_game(difficulty)
     game.generate(difficulty)
-    renderer.message(:difficulty, hints: Game::DIFFICULTIES[difficulty.to_sym][:hints], attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
+    renderer.message(:difficulty,
+                     hints: Game::DIFFICULTIES[difficulty.to_sym][:hints],
+                     attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
   end
 
   def game_process

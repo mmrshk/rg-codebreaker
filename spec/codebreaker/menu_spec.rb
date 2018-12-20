@@ -4,7 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Menu do
   let(:hints_array) { [1, 2] }
-  let(:code) { [1,2,3,4] }
+  let(:code) { [1, 2, 3, 4] }
   let(:command) { '1111' }
   let(:valid_name) { 'a' * rand(3..20) }
   let(:invalid_name) { 'a' * rand(0..2) }
@@ -126,8 +126,8 @@ RSpec.describe Menu do
     end
 
     it 'returns #exit_from_game' do
-      expect(subject).to receive(:game_menu)
-      subject.send(:choice_menu_process, :exit)
+      expect(subject).to receive(:exit_from_game)
+      subject.send(:choice_menu_process, Menu::COMMANDS[:exit])
     end
 
     it 'returns #command_error' do
@@ -157,7 +157,9 @@ RSpec.describe Menu do
     it do
       difficulty = Game::DIFFICULTIES.keys.first
       expect(subject.game).to receive(:generate).with(difficulty)
-      expect(subject.renderer).to receive(:message).with(:difficulty, hints: Game::DIFFICULTIES[difficulty.to_sym][:hints], attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
+      expect(subject.renderer).to receive(:message).with(:difficulty,
+                                                         hints: Game::DIFFICULTIES[difficulty.to_sym][:hints],
+                                                         attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
       subject.send(:generate_game, difficulty)
     end
   end
@@ -199,6 +201,13 @@ RSpec.describe Menu do
   end
 
   context 'when testing #game_process method' do
+    it 'returns #handle_win' do
+      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[:easy][:attempts])
+      expect(subject).to receive(:ask) { command }
+      expect(subject.game).to receive(:win?).with(command) { true }
+      expect(subject).to receive(:handle_win)
+      subject.send(:game_process)
+    end
     it 'retuns #handle_lose' do
       subject.game.instance_variable_set(:@attempts, 0)
       expect(subject).to receive(:handle_lose)
