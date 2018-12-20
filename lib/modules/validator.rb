@@ -3,12 +3,12 @@
 module Validator
   VALUE_FORMAT = /^[1-6]{4}$/.freeze
 
-  def check_emptyness(name)
-    name.empty?
+  def check_emptyness(value)
+    value.empty?
   end
 
-  def check_length(name)
-    name.size.between?(3, 20)
+  def check_length(value, min_size, max_size)
+    value.size.between?(min_size, max_size)
   end
 
   def check_command_range(command)

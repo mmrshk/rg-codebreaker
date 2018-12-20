@@ -2,11 +2,11 @@
 
 class Menu
   include Validator
-  attr_reader :data, :renderer, :game
+  attr_reader :storage, :renderer, :game
 
   COMMANDS = {
     start: 'start',
-    exit_from_game: 'exit',
+    exit: 'exit',
     rules: 'rules',
     stats: 'stats',
     hint: 'hint'
@@ -14,9 +14,11 @@ class Menu
   CHOOSE_COMMANDS = {
     yes: 'yes'
   }.freeze
+  MIN_SIZE_VALUE = 3
+  MAX_SIZE_VALUE = 20
 
   def initialize
-    @data = DataStorage.new
+    @storage = DataStorage.new
     @renderer = Renderer.new
     @game = Game.new
     @statistics = Statistics.new
@@ -24,11 +26,7 @@ class Menu
 
   def game_menu
     renderer.start_message
-    choice_menu_process(ask(:choice_options,
-                            start: COMMANDS[:start],
-                            rules: COMMANDS[:rules],
-                            stats: COMMANDS[:stats],
-                            exit: COMMANDS[:exit_from_game]))
+    choice_menu_process(ask(:choice_options, commands: COMMANDS.keys.join(' | ')))
   end
 
   private
@@ -39,35 +37,37 @@ class Menu
   end
 
   def start
-    registration
+    @name = registration
     level_choice
     game_process
   end
 
   def stats
-    render_stats(@statistics.stats(data.load)) if data.load
+    render_stats(@statistics.stats(storage.load)) if storage.load
     game_menu
   end
 
-  def ask(phrase_key = nil, hashee = {})
-    renderer.message(phrase_key, hashee) if phrase_key
+  def ask(phrase_key = nil, options = {})
+    renderer.message(phrase_key, options) if phrase_key
     gets.chomp
   end
 
   def save_result
-    data.save_game_result(game.to_h(@name)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
+    storage.save_game_result(game.to_h(@name)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
   end
 
   def registration
-    @name = ask(:registration)
-    unless name_valid?
+    loop do
+      name = ask(:registration)
+
+      return name if name_valid?(name)
+
       renderer.registration_name_length_error
-      registration
     end
   end
 
-  def name_valid?
-    !check_emptyness(@name) && check_length(@name)
+  def name_valid?(name)
+    !check_emptyness(name) && check_length(name, MIN_SIZE_VALUE, MAX_SIZE_VALUE)
   end
 
   def level_choice
@@ -76,7 +76,7 @@ class Menu
 
   def choose_level(level)
     return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
-    return game_menu if level == COMMANDS[:exit_from_game]
+    return game_menu if level == COMMANDS[:exit]
 
     renderer.command_error
     level_choice
@@ -84,23 +84,29 @@ class Menu
 
   def generate_game(difficulty)
     game.generate(difficulty)
-    renderer.message(difficulty)
+    renderer.message(:difficulty, hints: Game::DIFFICULTIES[difficulty.to_sym][:hints], attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
   end
 
   def game_process
     while game.attempts.positive?
-      return handle_win if player_wins
+      guess = ask
+      return handle_win if game.win?(guess)
 
-      renderer.round_message
-      game.decrease_attempts!
+      game_round(guess)
     end
     handle_lose
+  end
+
+  def game_round(guess)
+    choice_code_process(guess)
+    renderer.round_message
+    game.decrease_attempts!
   end
 
   def choice_code_process(command)
     case command
     when COMMANDS[:hint] then hint_process!
-    when COMMANDS[:exit_from_game] then game_menu
+    when COMMANDS[:exit] then game_menu
     else handle_command(command)
     end
   end
@@ -110,14 +116,6 @@ class Menu
 
     renderer.command_error
     game_process
-  end
-
-  def player_wins
-    guess = gets.chomp
-
-    return true if game.win?(guess)
-
-    game.win?(choice_code_process(guess))
   end
 
   def handle_win
@@ -145,7 +143,7 @@ class Menu
   def choice_menu_process(command_name)
     case command_name
     when COMMANDS[:start] then start
-    when COMMANDS[:exit_from_game] then exit_from_game
+    when COMMANDS[:exit] then exit_from_game
     when COMMANDS[:rules] then rules
     when COMMANDS[:stats] then stats
     else

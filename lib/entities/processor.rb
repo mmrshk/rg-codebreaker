@@ -7,32 +7,28 @@ class Processor
   attr_reader :guess, :code, :result
 
   def secret_code_proc(code, guess)
-    @code = code.each_char.map(&:to_i)
-    @guess = guess.each_char.map(&:to_i)
-    @result = ''
-    handle_matched_digits
-    handle_matched_digits_with_wrong_position
-
-    result
+    @code = code.split('')
+    @guess = guess.split('')
+    handle_matched_digits.join + handle_matched_digits_with_wrong_position.join
   end
 
   private
 
   def handle_matched_digits
-    code.each_with_index do |_, index|
+    code.map.with_index do |_, index|
       next unless code[index] == guess[index]
 
-      @result += MATCHED_DIGIT_CHAR
       @guess[index], @code[index] = nil
+      MATCHED_DIGIT_CHAR
     end
   end
 
   def handle_matched_digits_with_wrong_position
-    guess.compact.each do |number|
+    guess.compact.map do |number|
       next unless @code.include?(number)
 
-      @result += UNMATCHED_DIGIT_CHAR
       @code.delete_at(code.index(number))
+      UNMATCHED_DIGIT_CHAR
     end
   end
 end

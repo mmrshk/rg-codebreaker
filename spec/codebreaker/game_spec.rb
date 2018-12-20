@@ -3,11 +3,11 @@
 require 'spec_helper'
 
 RSpec.describe Game do
-  LOSE_RESULT = '-+++'
+  let(:lose_result) { '-+++' }
   let(:start_code) { '1111' }
   let(:hints_array) { [1, 2] }
   let(:valid_name) { 'a' * rand(3..20) }
-  let(:code) { [1, 1, 1, 1]}
+  let(:code) { [1, 1, 1, 1] }
 
   context 'when testing #take_a_hint! method' do
     it 'returnes last el of hints array' do
@@ -22,31 +22,24 @@ RSpec.describe Game do
       secret_code = subject.send(:generate_secret_code).join
       expect(secret_code).to match(/^[1-6]{#{Game::DIGITS_COUNT}}$/)
     end
-
-    it 'returns array of integers' do
-      code_array = subject.send(:generate_secret_code)
-      int_array = code_array.select { |x| x.is_a? Integer }
-      expect(code_array).to eq int_array
-    end
   end
 
   context 'when #generate method' do
     it 'returns message' do
-      initial_params = Game::DIFFICULTIES[:easy]
+      difficulty = Game::DIFFICULTIES.keys.first
       expect(subject).to receive(:generate_secret_code).and_return(code).twice
-      subject.generate(hints: initial_params[:hints], attempts: initial_params[:attempts])
-      expect(subject.attempts).to eq initial_params[:attempts]
-      hints = code.sample(initial_params[:hints])
-      expect(hints - code).to eq []
+      subject.generate(difficulty)
+      expect(subject.attempts).to eq Game::DIFFICULTIES[difficulty][:attempts]
+      hints = code.sample(Game::DIFFICULTIES[difficulty][:hints])
       expect(subject.hints).to eq hints
-      subject.generate(hints: initial_params[:hints], attempts: initial_params[:attempts])
+      subject.generate(difficulty)
     end
   end
 
   context 'when #start_process method' do
     it do
       process = subject.instance_variable_get(:@process)
-      win_code = Array.new(Game::DIGITS_COUNT, '+')
+      win_code = Array.new(Game::DIGITS_COUNT, Processor::MATCHED_DIGIT_CHAR)
       subject.instance_variable_set(:@code, win_code)
       expect(process).to receive(:secret_code_proc).with(win_code.join, start_code)
       subject.start_process(start_code)
@@ -55,22 +48,24 @@ RSpec.describe Game do
 
   context 'when testing #calculate method' do
     it 'calculates param tries' do
-      difficulty = Game::DIFFICULTIES.keys.first
+      level = subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
+
+      initial_params = Game::DIFFICULTIES[level]
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
-      calculated = { tries: Game::DIFFICULTIES[difficulty.to_sym][:attempts] - subject.attempts,
-                     suggestions: Game::DIFFICULTIES[difficulty.to_sym][:hints] - subject.hints.length}
-      expected_calculated = { tries: 13, suggestions: 0}
+
+      calculated = { tries: initial_params[:attempts] - subject.attempts,
+                     suggestions: initial_params[:hints] - subject.hints.length }
+      expected_calculated = { tries: 13, suggestions: 0 }
       expect(calculated).to eq expected_calculated
-      subject.calculate(:tries, difficulty)
+      subject.calculate(:tries)
     end
   end
 
   context 'used #decrease_attempts! method' do
     it 'decreases attempts by one when used' do
-      attempts = 3
       subject.instance_variable_set(:@attempts, 3)
-      expect(subject.decrease_attempts!).to eq attempts - 1
+      expect { subject.decrease_attempts! }.to change(subject, :attempts).by(-1)
     end
   end
 
@@ -86,21 +81,12 @@ RSpec.describe Game do
     end
   end
 
-  context 'when testing #win? method' do
-    it 'returns true' do
-      expect(subject.win?(Game::WIN_RESULT)).to be true
-    end
-
-    it 'returns false' do
-      expect(subject.win?(LOSE_RESULT)).to be false
-    end
-  end
-
   context 'when testing #to_h method' do
     it 'returns hash' do
+      subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
-      expect(subject.to_h(valid_name, Game::DIFFICULTIES.keys.first)).to be_an_instance_of(Hash)
+      expect(subject.to_h(valid_name)).to be_an_instance_of(Hash)
     end
   end
 end

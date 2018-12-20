@@ -1,10 +1,7 @@
 en:
   start_message: "Welcome to CodeBreaker"
   choice_options: "Choose option:
-  1. %{start}
-  2. %{rules}
-  3. %{stats}
-  4. %{exit}"
+  %{commands}"
   hard_level: "Which level you do you want to play?
   %{levels}"
   goodbye_message: "We are waiting for you. Come back!"
@@ -29,9 +26,7 @@ en:
   Codebreaker also has some number of hints(depends on chosen difficulty). If a user takes a hint - he receives back a separate digit of the secret code.
 "
   registration: "Before start, enter your name, please "
-  easy: "You had to 2 hints and 15 attempts"
-  medium: "You had to 1 hint and 10 attempts"
-  hell: "You had to 1 hint and 5 attempts"
+  difficulty: "You had to %{hints} hints and %{attempts} attempts"
   round_message: "1. Enter your secret code
   2. hint
   3. exit "

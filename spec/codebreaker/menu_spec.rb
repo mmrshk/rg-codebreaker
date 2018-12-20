@@ -4,6 +4,7 @@ require 'spec_helper'
 
 RSpec.describe Menu do
   let(:hints_array) { [1, 2] }
+  let(:code) { [1,2,3,4] }
   let(:command) { '1111' }
   let(:valid_name) { 'a' * rand(3..20) }
   let(:invalid_name) { 'a' * rand(0..2) }
@@ -47,7 +48,7 @@ RSpec.describe Menu do
   context 'when testing #stats method' do
     it 'returns stats' do
       statistics = subject.instance_variable_get(:@statistics)
-      expect(statistics).to receive(:stats).with(subject.data.load)
+      expect(statistics).to receive(:stats).with(subject.storage.load)
       expect(subject).to receive(:render_stats)
       expect(subject).to receive(:game_menu)
       subject.send(:stats)
@@ -58,11 +59,11 @@ RSpec.describe Menu do
     it 'expexts the choice of user' do
       expect(subject).to receive(:ask).with(:save_results_message).and_return(Menu::CHOOSE_COMMANDS[:yes])
       name = subject.instance_variable_set(:@name, valid_name)
-      level = subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first.to_s)
-      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[:easy][:attempts])
+      level = subject.game.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
+      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[level][:attempts])
       subject.game.instance_variable_set(:@hints, hints_array)
-      user_hash = subject.game.to_h(name, level)
-      expect(subject.data).to receive(:save_game_result).with(user_hash)
+      user_hash = subject.game.to_h(name)
+      expect(subject.storage).to receive(:save_game_result).with(user_hash)
       subject.send(:save_result)
     end
   end
@@ -72,26 +73,15 @@ RSpec.describe Menu do
       expect(subject).to receive(:ask).with(:registration).and_return(valid_name)
       subject.send(:registration)
     end
-=begin
-    it 'return registration_name_length_error' do
-      expect(subject).to receive(:ask).with(:registration)
-      expect(subject).to receive(:name_valid?) { false }
-      expect(subject.renderer).to receive(:registration_name_length_error)
-      expect(subject).to receive(:registration)
-      subject.send(:registration)
-    end
-=end
   end
 
   context 'when testing #name_valid? method' do
     it 'returns true' do
-      subject.instance_variable_set(:@name, valid_name)
-      expect(subject.send(:name_valid?)).to be true
+      expect(subject.send(:name_valid?, valid_name)).to be true
     end
 
     it 'returns false' do
-      subject.instance_variable_set(:@name, invalid_name)
-      expect(subject.send(:name_valid?)).to be false
+      expect(subject.send(:name_valid?, invalid_name)).to be false
     end
   end
 
@@ -111,7 +101,7 @@ RSpec.describe Menu do
 
     it 'returns #game_menu' do
       expect(subject).to receive(:game_menu)
-      subject.send(:choice_code_process, Menu::COMMANDS[:exit_from_game])
+      subject.send(:choice_code_process, Menu::COMMANDS[:exit])
     end
 
     it 'returns #handle_command' do
@@ -128,14 +118,19 @@ RSpec.describe Menu do
   end
 
   context 'when testing #choice_menu_process' do
-    %i[exit_from_game rules stats start].each do |command|
+    %i[rules stats start].each do |command|
       it "returns ##{command}" do
         expect(subject).to receive(command)
         subject.send(:choice_menu_process, Menu::COMMANDS[command])
       end
     end
 
-    it 'returns command_error' do
+    it 'returns #exit_from_game' do
+      expect(subject).to receive(:game_menu)
+      subject.send(:choice_menu_process, :exit)
+    end
+
+    it 'returns #command_error' do
       expect(subject.renderer).to receive(:command_error)
       expect(subject).to receive(:game_menu)
       subject.send(:choice_menu_process, command)
@@ -160,9 +155,9 @@ RSpec.describe Menu do
 
   context 'when testing #generate_game method' do
     it do
-      difficulty = Game::DIFFICULTIES.keys.first.to_s
-      expect(subject.game).to receive(:generate).with(Game::DIFFICULTIES[difficulty])
-      expect(subject.renderer).to receive(:message).with(difficulty)
+      difficulty = Game::DIFFICULTIES.keys.first
+      expect(subject.game).to receive(:generate).with(difficulty)
+      expect(subject.renderer).to receive(:message).with(:difficulty, hints: Game::DIFFICULTIES[difficulty.to_sym][:hints], attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
       subject.send(:generate_game, difficulty)
     end
   end
@@ -176,7 +171,7 @@ RSpec.describe Menu do
 
     it 'returns #game_menu' do
       expect(subject).to receive(:game_menu)
-      subject.send(:choose_level, Menu::COMMANDS[:exit_from_game])
+      subject.send(:choose_level, Menu::COMMANDS[:exit])
     end
 
     it 'retuns #level_choice' do
@@ -204,21 +199,6 @@ RSpec.describe Menu do
   end
 
   context 'when testing #game_process method' do
-    it 'retuns #handle_win' do
-      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[:easy][:attempts])
-      expect(subject).to receive(:player_wins?) { true }
-      expect(subject).to receive(:handle_win)
-      subject.send(:game_process)
-    end
-=begin
-    it 'retuns #round_message' do
-      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[:easy][:attempts])
-      expect(subject).to receive(:player_wins?) { false }
-      expect(subject.renderer).to receive(:round_message)
-      expect(subject.game).to receive(:decrease_attempts!)
-      subject.send(:game_process)
-    end
-=end
     it 'retuns #handle_lose' do
       subject.game.instance_variable_set(:@attempts, 0)
       expect(subject).to receive(:handle_lose)

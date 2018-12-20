@@ -18,7 +18,7 @@ class Game
   }.freeze
   RANGE = (1..6).freeze
 
-  attr_reader :attempts, :hints, :code, :level
+  attr_reader :attempts, :hints, :code
 
   def initialize
     @process = Processor.new
