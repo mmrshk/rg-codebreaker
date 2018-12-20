@@ -3,8 +3,6 @@
 require 'spec_helper'
 
 RSpec.describe Statistics do
-  let(:menu) { Menu.new }
-
   context 'when testing #stats method' do
     let(:player_1) do
       {
@@ -37,9 +35,42 @@ RSpec.describe Statistics do
       }
     end
 
+    let(:player_4) do
+      {
+        name: '',
+        difficulty: Game::DIFFICULTIES.keys.last,
+        all_attempts: 5,
+        attempts_used: 3,
+        all_hints: 1,
+        hints_used: 0
+      }
+    end
+
+    let(:player_5) do
+      {
+        name: '',
+        difficulty: Game::DIFFICULTIES.keys.last,
+        all_attempts: 5,
+        attempts_used: 1,
+        all_hints: 1,
+        hints_used: 1
+      }
+    end
+
+    let(:player_6) do
+      {
+        name: '',
+        difficulty: Game::DIFFICULTIES.keys.last,
+        all_attempts: 5,
+        attempts_used: 3,
+        all_hints: 1,
+        hints_used: 1
+      }
+    end
+
     it 'returns stats' do
-      expect(menu.data).to receive(:load).and_return([player_1, player_2, player_3])
-      expect(subject.stats(menu.data)).to eq [player_2, player_1, player_3]
+      list = [player_1, player_2, player_3, player_4, player_5, player_6]
+      expect(subject.stats(list)).to eq [player_6, player_4, player_5, player_2, player_1, player_3]
     end
   end
 end

@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 class Statistics
-  def stats(data)
-    list = data.load
+  def stats(list)
     easy = difficulty(list, Game::DIFFICULTIES[:easy])
     medium = difficulty(list, Game::DIFFICULTIES[:medium])
     hell = difficulty(list, Game::DIFFICULTIES[:hell])

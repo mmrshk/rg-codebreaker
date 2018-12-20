@@ -17,41 +17,45 @@ class Game
     }
   }.freeze
   RANGE = (1..6).freeze
-  WIN_RESULT = '++++'
 
-  attr_reader :attempts, :hints, :code
+  attr_reader :attempts, :hints, :code, :level
 
   def initialize
     @process = Processor.new
   end
 
-  def generate(hints:, attempts:)
+  def generate(difficulty)
+    @level = difficulty
     @code = generate_secret_code
-    @hints = @code.sample(hints)
-    @attempts = attempts
+    @hints = @code.sample(DIFFICULTIES[difficulty][:hints])
+    @attempts = DIFFICULTIES[difficulty][:attempts]
   end
 
   def start_process(command)
     @process.secret_code_proc(code.join, command)
   end
 
+  def win?(result)
+    code.join == result
+  end
+
   def decrease_attempts!
     @attempts -= 1
   end
 
-  def to_h(name, level)
+  def to_h(name)
     {
       name: name,
-      difficulty: level,
-      all_attempts: DIFFICULTIES[level.to_sym][:attempts],
-      attempts_used: calculate(:tries, level),
-      all_hints: DIFFICULTIES[level.to_sym][:hints],
-      hints_used: calculate(:suggestions, level)
+      difficulty: @level,
+      all_attempts: DIFFICULTIES[@level][:attempts],
+      attempts_used: calculate(:tries),
+      all_hints: DIFFICULTIES[@level][:hints],
+      hints_used: calculate(:suggestions)
     }
   end
 
-  def calculate(param, difficulty)
-    initial_params = Game::DIFFICULTIES[difficulty.to_sym]
+  def calculate(param)
+    initial_params = DIFFICULTIES[@level]
 
     calculated = { tries: initial_params[:attempts] - @attempts,
                    suggestions: initial_params[:hints] - @hints.length }
@@ -64,10 +68,6 @@ class Game
 
   def take_a_hint!
     hints.pop
-  end
-
-  def win?(result)
-    result == WIN_RESULT
   end
 
   private

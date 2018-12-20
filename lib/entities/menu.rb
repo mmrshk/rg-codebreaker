@@ -6,7 +6,7 @@ class Menu
 
   COMMANDS = {
     start: 'start',
-    exit: 'exit',
+    exit_from_game: 'exit',
     rules: 'rules',
     stats: 'stats',
     hint: 'hint'
@@ -28,7 +28,7 @@ class Menu
                             start: COMMANDS[:start],
                             rules: COMMANDS[:rules],
                             stats: COMMANDS[:stats],
-                            exit: COMMANDS[:exit]))
+                            exit: COMMANDS[:exit_from_game]))
   end
 
   private
@@ -38,14 +38,14 @@ class Menu
     game_menu
   end
 
-  def new_game
+  def start
     registration
     level_choice
     game_process
   end
 
   def stats
-    render_stats(@statistics.stats(data)) if data.load
+    render_stats(@statistics.stats(data.load)) if data.load
     game_menu
   end
 
@@ -55,7 +55,7 @@ class Menu
   end
 
   def save_result
-    data.save_game_result(game.to_h(@name, @level)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
+    data.save_game_result(game.to_h(@name)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
   end
 
   def registration
@@ -71,22 +71,54 @@ class Menu
   end
 
   def level_choice
-    @level = ask(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | '))
-    choose_level(@level)
+    choose_level(ask(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')))
+  end
+
+  def choose_level(level)
+    return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
+    return game_menu if level == COMMANDS[:exit_from_game]
+
+    renderer.command_error
+    level_choice
+  end
+
+  def generate_game(difficulty)
+    game.generate(difficulty)
+    renderer.message(difficulty)
   end
 
   def game_process
     while game.attempts.positive?
-      return handle_win if player_wins?
+      return handle_win if player_wins
 
+      p @game.code
       renderer.round_message
       game.decrease_attempts!
     end
     handle_lose
   end
 
-  def player_wins?
-    game.win?(choice_code_process(gets.chomp))
+  def choice_code_process(command)
+    case command
+    when COMMANDS[:hint] then hint_process!
+    when COMMANDS[:exit_from_game] then game_menu
+    else handle_command(command)
+    end
+  end
+
+  def handle_command(command)
+    return p game.start_process(command) if check_command_range(command)
+
+    renderer.command_error
+    game_process
+  end
+
+  def player_wins
+    guess = gets.chomp
+
+    return true if game.win?(guess)
+  
+    game.win?(choice_code_process(guess))
   end
 
   def handle_win
@@ -106,21 +138,6 @@ class Menu
     renderer.print_hint_number(game.take_a_hint!)
   end
 
-  def choice_code_process(command)
-    case command
-    when COMMANDS[:hint] then hint_process!
-    when COMMANDS[:exit] then game_menu
-    else handle_command(command)
-    end
-  end
-
-  def handle_command(command)
-    return p game.start_process(command) if check_command_range(command)
-
-    renderer.command_error
-    game_process
-  end
-
   def exit_from_game
     renderer.goodbye_message
     exit
@@ -128,27 +145,14 @@ class Menu
 
   def choice_menu_process(command_name)
     case command_name
-    when COMMANDS[:start] then new_game
-    when COMMANDS[:exit] then exit_from_game
+    when COMMANDS[:start] then start
+    when COMMANDS[:exit_from_game] then exit_from_game
     when COMMANDS[:rules] then rules
     when COMMANDS[:stats] then stats
     else
       renderer.command_error
       game_menu
     end
-  end
-
-  def choose_level(level)
-    return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
-    return game_menu if level == COMMANDS[:exit]
-
-    renderer.command_error
-    level_choice
-  end
-
-  def generate_game(difficulty)
-    game.generate(Game::DIFFICULTIES[difficulty])
-    renderer.message(difficulty)
   end
 
   def render_stats(list)
