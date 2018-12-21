@@ -2,14 +2,13 @@
 
 class Menu
   include Validator
-  attr_reader :storage, :renderer, :game
+  attr_reader :storage, :renderer, :game, :guess
 
   COMMANDS = {
     start: 'start',
     exit: 'exit',
     rules: 'rules',
     stats: 'stats',
-    hint: 'hint'
   }.freeze
   CHOOSE_COMMANDS = {
     yes: 'yes'
@@ -91,26 +90,25 @@ class Menu
 
   def game_process
     while game.attempts.positive?
-      guess = ask
+      @guess = ask
       return handle_win if game.win?(guess)
 
-      p @game.code
-      game_round(guess)
+      game_round
     end
     handle_lose
   end
 
-  def game_round(guess)
-    choice_code_process(guess)
+  def game_round
+    choice_code_process
     renderer.round_message
     game.decrease_attempts!
   end
 
-  def choice_code_process(command)
-    case command
-    when COMMANDS[:hint] then hint_process!
+  def choice_code_process
+    case guess
+    when Game::HINT then hint_process!
     when COMMANDS[:exit] then game_menu
-    else handle_command(command)
+    else handle_command(guess)
     end
   end
 

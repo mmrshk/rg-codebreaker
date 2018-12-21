@@ -108,18 +108,21 @@ RSpec.describe Menu do
 
   context 'when testing #choice_code_process method' do
     it 'returns #take_a_hint!' do
+      subject.instance_variable_set(:@guess, Game::HINT)
       expect(subject).to receive(:hint_process!)
-      subject.send(:choice_code_process, Menu::COMMANDS[:hint])
+      subject.send(:choice_code_process)
     end
 
     it 'returns #game_menu' do
+      subject.instance_variable_set(:@guess, Menu::COMMANDS[:exit])
       expect(subject).to receive(:game_menu)
-      subject.send(:choice_code_process, Menu::COMMANDS[:exit])
+      subject.send(:choice_code_process)
     end
 
     it 'returns #handle_command' do
+      subject.instance_variable_set(:@guess, command)
       expect(subject).to receive(:handle_command).with(command)
-      subject.send(:choice_code_process, command)
+      subject.send(:choice_code_process)
     end
   end
 

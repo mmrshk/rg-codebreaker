@@ -50,7 +50,7 @@ RSpec.describe Game do
       subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
-      expected_calculated = { tries: 13, suggestions: 0 }
+      expected_calculated = { attempts_used: 13, hints_used: 0 }
       expect(subject.calculate).to eq expected_calculated
     end
   end

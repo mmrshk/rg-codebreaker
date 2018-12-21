@@ -17,6 +17,7 @@ class Game
     }
   }.freeze
   RANGE = (1..6).freeze
+  HINT = 'hint'
 
   attr_reader :attempts, :hints, :code
 
@@ -56,8 +57,8 @@ class Game
   def calculate
     initial_params = DIFFICULTIES[@level]
     {
-      tries: initial_params[:attempts] - @attempts,
-      suggestions: initial_params[:hints] - @hints.length
+      attempts_used: initial_params[:attempts] - @attempts,
+      hints_used: initial_params[:hints] - @hints.length
     }
   end
 
