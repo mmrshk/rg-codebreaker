@@ -71,15 +71,14 @@ class Menu
   end
 
   def level_choice
-    choose_level(ask(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')))
-  end
+    loop do
+      level = ask(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | '))
 
-  def choose_level(level)
-    return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
-    return game_menu if level == COMMANDS[:exit]
+      return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
+      return game_menu if level == COMMANDS[:exit]
 
-    renderer.command_error
-    level_choice
+      renderer.command_error
+    end
   end
 
   def generate_game(difficulty)
@@ -94,6 +93,7 @@ class Menu
       guess = ask
       return handle_win if game.win?(guess)
 
+      p @game.code
       game_round(guess)
     end
     handle_lose

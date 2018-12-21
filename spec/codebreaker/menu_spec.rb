@@ -87,9 +87,24 @@ RSpec.describe Menu do
   end
 
   context 'when testing #level_choice method' do
-    it 'checks input of user' do
-      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')).and_return(Game::DIFFICULTIES.keys.first.to_s)
-      expect(subject).to receive(:choose_level)
+    it 'returns #generate_game' do
+      level = Game::DIFFICULTIES.keys.first
+      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { level }
+      expect(subject).to receive(:generate_game).with(level.to_sym)
+      subject.send(:level_choice)
+    end
+
+    it 'returns #game_menu' do
+      level = Menu::COMMANDS[:exit]
+      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { level }
+      expect(subject).to receive(:game_menu)
+      subject.send(:level_choice)
+    end
+
+    it 'returns #command_error' do
+      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { command }
+      expect(subject.renderer).to receive(:command_error)
+      allow(subject).to receive(:loop).and_yield
       subject.send(:level_choice)
     end
   end
@@ -162,25 +177,6 @@ RSpec.describe Menu do
                                                          hints: Game::DIFFICULTIES[difficulty.to_sym][:hints],
                                                          attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
       subject.send(:generate_game, difficulty)
-    end
-  end
-
-  context 'when testing #choose_level method' do
-    it 'returns generated game' do
-      level = Game::DIFFICULTIES.keys.first.to_s
-      expect(subject).to receive(:generate_game).with(level.to_sym)
-      subject.send(:choose_level, level)
-    end
-
-    it 'returns #game_menu' do
-      expect(subject).to receive(:game_menu)
-      subject.send(:choose_level, Menu::COMMANDS[:exit])
-    end
-
-    it 'retuns #level_choice' do
-      expect(subject.renderer).to receive(:command_error)
-      expect(subject).to receive(:level_choice)
-      subject.send(:choose_level, command)
     end
   end
 

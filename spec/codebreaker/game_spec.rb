@@ -58,7 +58,7 @@ RSpec.describe Game do
                      suggestions: initial_params[:hints] - subject.hints.length }
       expected_calculated = { tries: 13, suggestions: 0 }
       expect(calculated).to eq expected_calculated
-      subject.calculate(:tries)
+      subject.calculate
     end
   end
 

@@ -48,18 +48,17 @@ class Game
       name: name,
       difficulty: @level.to_s,
       all_attempts: DIFFICULTIES[@level][:attempts],
-      attempts_used: calculate(:tries),
       all_hints: DIFFICULTIES[@level][:hints],
-      hints_used: calculate(:suggestions)
+      **calculate
     }
   end
 
-  def calculate(param)
+  def calculate
     initial_params = DIFFICULTIES[@level]
-
-    calculated = { tries: initial_params[:attempts] - @attempts,
-                   suggestions: initial_params[:hints] - @hints.length }
-    calculated[param]
+    {
+      tries: initial_params[:attempts] - @attempts,
+      suggestions: initial_params[:hints] - @hints.length
+    }
   end
 
   def hints_spent?
