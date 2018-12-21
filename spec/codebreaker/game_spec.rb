@@ -25,14 +25,13 @@ RSpec.describe Game do
   end
 
   context 'when #generate method' do
-    it 'returns message' do
+    it do
       difficulty = Game::DIFFICULTIES.keys.first
-      expect(subject).to receive(:generate_secret_code).and_return(code).twice
+      expect(subject).to receive(:generate_secret_code).and_return(code)
       subject.generate(difficulty)
       expect(subject.attempts).to eq Game::DIFFICULTIES[difficulty][:attempts]
-      hints = code.sample(Game::DIFFICULTIES[difficulty][:hints])
-      expect(subject.hints).to eq hints
-      subject.generate(difficulty)
+      expect(subject.instance_variable_get(:@level)).to eq difficulty
+      expect(code).to include(*subject.instance_variable_get(:@hints))
     end
   end
 
@@ -48,17 +47,11 @@ RSpec.describe Game do
 
   context 'when testing #calculate method' do
     it 'calculates param tries' do
-      level = subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
-
-      initial_params = Game::DIFFICULTIES[level]
+      subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
-
-      calculated = { tries: initial_params[:attempts] - subject.attempts,
-                     suggestions: initial_params[:hints] - subject.hints.length }
       expected_calculated = { tries: 13, suggestions: 0 }
-      expect(calculated).to eq expected_calculated
-      subject.calculate
+      expect(subject.calculate).to eq expected_calculated
     end
   end
 

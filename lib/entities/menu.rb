@@ -43,7 +43,8 @@ class Menu
   end
 
   def stats
-    render_stats(@statistics.stats(storage.load)) if storage.load
+    users_data = storage.load
+    render_stats(@statistics.stats(users_data)) if users_data
     game_menu
   end
 
@@ -157,7 +158,7 @@ class Menu
   def render_stats(list)
     list.each_with_index do |key, index|
       puts "#{index + 1}: "
-      key.each { |el, value| puts "#{el}:#{value}" }
+      key.each { |param, value| puts "#{param}:#{value}" }
     end
   end
 end

@@ -48,7 +48,7 @@ RSpec.describe Menu do
   context 'when testing #stats method' do
     it 'returns stats' do
       statistics = subject.instance_variable_get(:@statistics)
-      expect(subject.storage).to receive(:load) { list }.twice
+      expect(subject.storage).to receive(:load) { list }
       expect(statistics).to receive(:stats)
       expect(subject).to receive(:render_stats)
       expect(subject).to receive(:game_menu)
@@ -59,12 +59,9 @@ RSpec.describe Menu do
   context 'when testing #save_result method' do
     it 'expexts the choice of user' do
       expect(subject).to receive(:ask).with(:save_results_message).and_return(Menu::CHOOSE_COMMANDS[:yes])
-      name = subject.instance_variable_set(:@name, valid_name)
-      level = subject.game.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
-      subject.game.instance_variable_set(:@attempts, Game::DIFFICULTIES[level][:attempts])
-      subject.game.instance_variable_set(:@hints, hints_array)
-      user_hash = subject.game.to_h(name)
-      expect(subject.storage).to receive(:save_game_result).with(user_hash)
+      subject.instance_variable_set(:@name, valid_name)
+      expect(subject.game).to receive(:to_h).with(valid_name) { {} }
+      expect(subject.storage).to receive(:save_game_result).with({})
       subject.send(:save_result)
     end
   end
@@ -95,8 +92,8 @@ RSpec.describe Menu do
     end
 
     it 'returns #game_menu' do
-      level = Menu::COMMANDS[:exit]
-      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { level }
+      exit = Menu::COMMANDS[:exit]
+      expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { exit }
       expect(subject).to receive(:game_menu)
       subject.send(:level_choice)
     end
