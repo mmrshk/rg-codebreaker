@@ -1,5 +1,5 @@
 # Codebreaker
-[![Maintainability]()
+[![Maintainability](https://codeclimate.com/github/mmrshk/rg-codebreaker)
 [![CircleCI](https://circleci.com/gh/mmrshk/workflows/rg-codebreaker)
 
 Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/codebreaker`. To experiment with that code, run `bin/console` for an interactive prompt.
@@ -42,4 +42,4 @@ The gem is available as open source under the terms of the [MIT License](https:/
 
 ## Code of Conduct
 
-Everyone interacting in the Codebreaker project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/[USERNAME]/codebreaker/blob/master/CODE_OF_CONDUCT.md).
+Everyone interacting in the Codebreaker project’s codebases, issue trackers, chat rooms and mailing lists is expected to follow the [code of conduct](https://github.com/mmrshk/codebreaker/blob/master/CODE_OF_CONDUCT.md).
