@@ -108,7 +108,7 @@ RSpec.describe Menu do
 
   context 'when testing #choice_code_process method' do
     it 'returns #take_a_hint!' do
-      subject.instance_variable_set(:@guess, Game::HINT)
+      subject.instance_variable_set(:@guess, Menu::HINT_COMMAND)
       expect(subject).to receive(:hint_process)
       subject.send(:choice_code_process)
     end

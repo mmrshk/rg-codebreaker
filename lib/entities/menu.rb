@@ -13,6 +13,7 @@ class Menu
   CHOOSE_COMMANDS = {
     yes: 'yes'
   }.freeze
+  HINT_COMMAND = 'hint'
   MIN_SIZE_VALUE = 3
   MAX_SIZE_VALUE = 20
 
@@ -100,7 +101,7 @@ class Menu
 
   def choice_code_process
     case guess
-    when Game::HINT then hint_process
+    when HINT_COMMAND then hint_process
     when COMMANDS[:exit] then game_menu
     else handle_command
     end

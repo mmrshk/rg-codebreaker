@@ -4,7 +4,11 @@ class Statistics
   def stats(list)
     difficulties = list.group_by { |score| score[:difficulty] }
     %w[hell medium easy].reduce([]) do |sorted_difficulties, difficulty_name|
-      difficulties[difficulty_name] ? sorted_difficulties + stats_sort(difficulties[difficulty_name]) : sorted_difficulties
+      if difficulties[difficulty_name]
+        sorted_difficulties + stats_sort(difficulties[difficulty_name])
+      else
+        sorted_difficulties
+      end
     end
   end
 

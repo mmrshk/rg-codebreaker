@@ -17,7 +17,6 @@ class Game
     }
   }.freeze
   RANGE = (1..6).freeze
-  HINT = 'hint'
 
   attr_reader :attempts, :hints, :code
 
