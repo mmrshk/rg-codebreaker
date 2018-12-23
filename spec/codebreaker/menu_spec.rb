@@ -38,7 +38,7 @@ RSpec.describe Menu do
 
   context 'when testing #start method' do
     it do
-      expect(subject).to receive(:registration)
+      expect(subject).to receive(:registrate_user)
       expect(subject).to receive(:level_choice)
       expect(subject).to receive(:game_process)
       subject.send(:start)
@@ -69,7 +69,7 @@ RSpec.describe Menu do
   context 'when testing #registration method' do
     it 'set name' do
       expect(subject).to receive(:ask).with(:registration).and_return(valid_name)
-      subject.send(:registration)
+      subject.send(:registrate_user)
     end
   end
 
@@ -87,7 +87,7 @@ RSpec.describe Menu do
     it 'returns #generate_game' do
       level = Game::DIFFICULTIES.keys.first
       expect(subject).to receive(:ask).with(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | ')) { level }
-      expect(subject).to receive(:generate_game).with(level.to_sym)
+      expect(subject).to receive(:generate_game).with(Game::DIFFICULTIES[level.to_sym])
       subject.send(:level_choice)
     end
 
@@ -109,7 +109,7 @@ RSpec.describe Menu do
   context 'when testing #choice_code_process method' do
     it 'returns #take_a_hint!' do
       subject.instance_variable_set(:@guess, Game::HINT)
-      expect(subject).to receive(:hint_process!)
+      expect(subject).to receive(:hint_process)
       subject.send(:choice_code_process)
     end
 
@@ -121,7 +121,7 @@ RSpec.describe Menu do
 
     it 'returns #handle_command' do
       subject.instance_variable_set(:@guess, command)
-      expect(subject).to receive(:handle_command).with(command)
+      expect(subject).to receive(:handle_command)
       subject.send(:choice_code_process)
     end
   end
@@ -161,21 +161,21 @@ RSpec.describe Menu do
     end
   end
 
-  context 'when testing #hint_process! method' do
+  context 'when testing #hint_process method' do
     it 'returns no_hints_message?' do
       subject.game.instance_variable_set(:@hints, [])
       expect(subject.renderer).to receive(:no_hints_message?)
-      subject.send(:hint_process!)
+      subject.send(:hint_process)
     end
   end
 
   context 'when testing #generate_game method' do
     it do
-      difficulty = Game::DIFFICULTIES.keys.first
+      difficulty = Game::DIFFICULTIES[:easy]
       expect(subject.game).to receive(:generate).with(difficulty)
       expect(subject.renderer).to receive(:message).with(:difficulty,
-                                                         hints: Game::DIFFICULTIES[difficulty.to_sym][:hints],
-                                                         attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
+                                                         hints: difficulty[:hints],
+                                                         attempts: difficulty[:attempts])
       subject.send(:generate_game, difficulty)
     end
   end

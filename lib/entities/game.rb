@@ -26,18 +26,18 @@ class Game
   end
 
   def generate(difficulty)
-    @level = difficulty
+    @difficulty = difficulty
     @code = generate_secret_code
-    @hints = @code.sample(DIFFICULTIES[difficulty][:hints])
-    @attempts = DIFFICULTIES[difficulty][:attempts]
+    @hints = @code.sample(difficulty[:hints])
+    @attempts = difficulty[:attempts]
   end
 
   def start_process(command)
     @process.secret_code_proc(code.join, command)
   end
 
-  def win?(result)
-    code.join == result
+  def win?(guess)
+    code.join == guess
   end
 
   def decrease_attempts!
@@ -47,18 +47,11 @@ class Game
   def to_h(name)
     {
       name: name,
-      difficulty: @level.to_s,
-      all_attempts: DIFFICULTIES[@level][:attempts],
-      all_hints: DIFFICULTIES[@level][:hints],
-      **calculate
-    }
-  end
-
-  def calculate
-    initial_params = DIFFICULTIES[@level]
-    {
-      attempts_used: initial_params[:attempts] - @attempts,
-      hints_used: initial_params[:hints] - @hints.length
+      difficulty: DIFFICULTIES.key(@difficulty),
+      all_attempts: @difficulty[:attempts],
+      all_hints: @difficulty[:hints],
+      attempts_used: @difficulty[:attempts] - @attempts,
+      hints_used: @difficulty[:hints] - @hints.length
     }
   end
 

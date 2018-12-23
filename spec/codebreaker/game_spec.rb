@@ -26,11 +26,11 @@ RSpec.describe Game do
 
   context 'when #generate method' do
     it do
-      difficulty = Game::DIFFICULTIES.keys.first
+      difficulty = Game::DIFFICULTIES[:easy]
       expect(subject).to receive(:generate_secret_code).and_return(code)
       subject.generate(difficulty)
-      expect(subject.attempts).to eq Game::DIFFICULTIES[difficulty][:attempts]
-      expect(subject.instance_variable_get(:@level)).to eq difficulty
+      expect(subject.attempts).to eq difficulty[:attempts]
+      expect(subject.instance_variable_get(:@difficulty)).to eq difficulty
       expect(code).to include(*subject.instance_variable_get(:@hints))
     end
   end
@@ -42,16 +42,6 @@ RSpec.describe Game do
       subject.instance_variable_set(:@code, win_code)
       expect(process).to receive(:secret_code_proc).with(win_code.join, start_code)
       subject.start_process(start_code)
-    end
-  end
-
-  context 'when testing #calculate method' do
-    it 'calculates param tries' do
-      subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
-      subject.instance_variable_set(:@attempts, 2)
-      subject.instance_variable_set(:@hints, hints_array)
-      expected_calculated = { attempts_used: 13, hints_used: 0 }
-      expect(subject.calculate).to eq expected_calculated
     end
   end
 
@@ -76,7 +66,7 @@ RSpec.describe Game do
 
   context 'when testing #to_h method' do
     it 'returns hash' do
-      subject.instance_variable_set(:@level, Game::DIFFICULTIES.keys.first)
+      subject.instance_variable_set(:@difficulty, Game::DIFFICULTIES[:easy])
       subject.instance_variable_set(:@attempts, 2)
       subject.instance_variable_set(:@hints, hints_array)
       expect(subject.to_h(valid_name)).to be_an_instance_of(Hash)

@@ -2,15 +2,15 @@
 
 class Statistics
   def stats(list)
-    hash = list.group_by { |score| score[:difficulty] }
-    %w[hell medium easy].reduce([]) do |previous, current|
-      hash[current] ? previous + stats_sort(hash[current]) : previous
+    difficulties = list.group_by { |score| score[:difficulty] }
+    %w[hell medium easy].reduce([]) do |sorted_difficulties, difficulty_name|
+      difficulties[difficulty_name] ? sorted_difficulties + stats_sort(difficulties[difficulty_name]) : sorted_difficulties
     end
   end
 
   private
 
-  def stats_sort(players_array)
-    players_array.sort_by! { |k| [k[:attempts_used], k[:hints_used]] }.reverse
+  def stats_sort(scores)
+    scores.sort_by! { |score| [score[:attempts_used], score[:hints_used]] }.reverse
   end
 end

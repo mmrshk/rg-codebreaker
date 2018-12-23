@@ -8,7 +8,7 @@ class Menu
     start: 'start',
     exit: 'exit',
     rules: 'rules',
-    stats: 'stats',
+    stats: 'stats'
   }.freeze
   CHOOSE_COMMANDS = {
     yes: 'yes'
@@ -36,14 +36,14 @@ class Menu
   end
 
   def start
-    @name = registration
+    @name = registrate_user
     level_choice
     game_process
   end
 
   def stats
-    users_data = storage.load
-    render_stats(@statistics.stats(users_data)) if users_data
+    scores = storage.load
+    render_stats(@statistics.stats(scores)) if scores
     game_menu
   end
 
@@ -56,7 +56,7 @@ class Menu
     storage.save_game_result(game.to_h(@name)) if ask(:save_results_message) == CHOOSE_COMMANDS[:yes]
   end
 
-  def registration
+  def registrate_user
     loop do
       name = ask(:registration)
 
@@ -74,7 +74,7 @@ class Menu
     loop do
       level = ask(:hard_level, levels: Game::DIFFICULTIES.keys.join(' | '))
 
-      return generate_game(level.to_sym) if Game::DIFFICULTIES[level.to_sym]
+      return generate_game(Game::DIFFICULTIES[level.to_sym]) if Game::DIFFICULTIES[level.to_sym]
       return game_menu if level == COMMANDS[:exit]
 
       renderer.command_error
@@ -84,8 +84,8 @@ class Menu
   def generate_game(difficulty)
     game.generate(difficulty)
     renderer.message(:difficulty,
-                     hints: Game::DIFFICULTIES[difficulty.to_sym][:hints],
-                     attempts: Game::DIFFICULTIES[difficulty.to_sym][:attempts])
+                     hints: difficulty[:hints],
+                     attempts: difficulty[:attempts])
   end
 
   def game_process
@@ -93,30 +93,25 @@ class Menu
       @guess = ask
       return handle_win if game.win?(guess)
 
-      game_round
+      choice_code_process
     end
     handle_lose
   end
 
-  def game_round
-    choice_code_process
-    renderer.round_message
-    game.decrease_attempts!
-  end
-
   def choice_code_process
     case guess
-    when Game::HINT then hint_process!
+    when Game::HINT then hint_process
     when COMMANDS[:exit] then game_menu
-    else handle_command(guess)
+    else handle_command
     end
   end
 
-  def handle_command(command)
-    return p game.start_process(command) if check_command_range(command)
+  def handle_command
+    return renderer.command_error unless check_command_range(guess)
 
-    renderer.command_error
-    game_process
+    p game.start_process(guess)
+    renderer.round_message
+    game.decrease_attempts!
   end
 
   def handle_win
@@ -130,7 +125,7 @@ class Menu
     game_menu
   end
 
-  def hint_process!
+  def hint_process
     return renderer.no_hints_message? if game.hints_spent?
 
     renderer.print_hint_number(game.take_a_hint!)
