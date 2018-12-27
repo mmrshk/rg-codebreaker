@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.name          = 'codebreaker'
   spec.version       = Codebreaker::VERSION
   spec.authors       = ['Emma Yeroshek']
-  spec.email         = ['olena.ivanytska@gmail.com']
+  spec.email         = ['emma.yeroshek@gmail.com']
 
   spec.summary       = 'Codebreaker app'
   spec.description   = 'Logic game'
