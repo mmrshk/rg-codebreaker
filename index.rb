@@ -2,4 +2,4 @@
 
 require_relative 'autoload.rb'
 
-Menu.new.game_menu
+Codebreaker::Entities::Menu.new.game_menu

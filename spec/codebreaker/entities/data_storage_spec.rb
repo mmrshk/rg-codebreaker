@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe DataStorage do
+RSpec.describe Codebreaker::Entities::DataStorage do
   let(:path) { 'database/data_test.yml' }
 
   before do
@@ -15,7 +15,7 @@ RSpec.describe DataStorage do
   let(:test_object) do
     {
       name: 'Denis',
-      difficulty: Game::DIFFICULTIES.keys.first,
+      difficulty: Codebreaker::Entities::Game::DIFFICULTIES.keys.first,
       all_attempts: 15,
       attempts_used: 15,
       all_hints: 2,
@@ -25,7 +25,7 @@ RSpec.describe DataStorage do
 
   context 'when testing #storage_exist?' do
     it 'checks existence of file' do
-      expect(File).to exist(DataStorage::FILE_NAME)
+      expect(File).to exist(Codebreaker::Entities::DataStorage::FILE_NAME)
       expect(subject.storage_exist?).to eq true
     end
   end

@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Processor do
+RSpec.describe Codebreaker::Entities::Processor do
   context 'when testing #secret_code_proc method' do
     [
       ['1234', '1234', '++++'], ['1234', '4321', '----'], ['1231', '1234', '+++'],

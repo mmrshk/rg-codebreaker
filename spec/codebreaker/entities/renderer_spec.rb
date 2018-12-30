@@ -2,7 +2,7 @@
 
 require 'spec_helper'
 
-RSpec.describe Renderer do
+RSpec.describe Codebreaker::Entities::Renderer do
   let(:code) { '1111' }
 
   context 'when #message method' do

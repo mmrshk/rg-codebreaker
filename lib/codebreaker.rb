@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require "codebreaker/version"
+require 'codebreaker/version'
 
 module Codebreaker
 end
