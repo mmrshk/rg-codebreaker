@@ -7,7 +7,7 @@ RSpec.describe Codebreaker::Entities::DataStorage do
 
   before do
     File.new(path, 'w+')
-    stub_const('DataStorage::FILE_NAME', 'database/data_test.yml')
+    stub_const('Codebreaker::Entities::DataStorage::FILE_NAME', 'database/data_test.yml')
   end
 
   after { File.delete(path) }
