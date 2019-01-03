@@ -52,7 +52,8 @@ module Codebreaker
           all_attempts: @difficulty[:attempts],
           all_hints: @difficulty[:hints],
           attempts_used: @difficulty[:attempts] - @attempts,
-          hints_used: @difficulty[:hints] - @hints.length
+          hints_used: @difficulty[:hints] - @hints.length,
+          date: Time.now
         }
       end
 
