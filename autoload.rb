@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
 require 'i18n'
 require 'yaml'
 require_relative 'lib/codebreaker/i18n_config'
